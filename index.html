@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Hohyeon Lee — paintings, sculptures and film about the lives we overlook and the boundaries between people and other living things.">
+<meta property="og:title" content="Hohyeon Lee">
+<meta property="og:description" content="Paintings, sculptures and film.">
+<meta property="og:image" content="img/where-no-one-hurts-them-m.jpg">
+<meta name="theme-color" content="#0b120d">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Hohyeon Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* Layout: a walk through a forest. Dark ground, layered canopy hero, uneven gallery cadence, one-column case studies at 64ch. Tokens mirror the Understory design system. */
+:root{
+  --ground-0:#0b120d; --ground-1:#121a14; --ground-2:#1b261c;
+  --ink:#ece6d6; --ink-muted:#a9a593; --hairline:#2a362c;
+  --moss:#6f9a5b; --fern:#a9c98a; --on-moss:#0b120d; --bark:#8a6a48; --amber:#d9a441; --mist:#c9d3c6;
+  --focus:#e4c56a; --overlay:rgba(5,9,6,.78);
+  --shadow-canopy:0 32px 64px -24px rgba(0,0,0,.7);
+  --fog-near:.4; --fog-far:.12;
+  --font-display:"Outfit","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  --font-sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --s1:4px;--s2:8px;--s3:16px;--s4:24px;--s5:40px;--s6:64px;--s7:104px;--s8:168px;
+  --r-sm:3px;--r-md:10px;--r-pill:999px;
+  --dur-fast:180ms;--dur-base:600ms;--dur-slow:1400ms;
+  --ease-leaf:cubic-bezier(.16,1,.3,1);--ease-wind:cubic-bezier(.65,0,.35,1);
+  --gutter:max(16px,env(safe-area-inset-left,0px));
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --ground-0:#f4f1e8;--ground-1:#ebe7da;--ground-2:#e0dbc8;--ink:#15201a;--ink-muted:#4e5a50;--hairline:#cfc9b6;
+    --moss:#3f6b2f;--fern:#5c8a3e;--on-moss:#f4f1e8;--bark:#6b4a2c;--amber:#8f6210;--mist:#8d9a8c;--focus:#7a4f00;
+    --overlay:rgba(21,32,26,.8);--shadow-canopy:0 32px 64px -24px rgba(21,32,26,.3);color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --ground-0:#f4f1e8;--ground-1:#ebe7da;--ground-2:#e0dbc8;--ink:#15201a;--ink-muted:#4e5a50;--hairline:#cfc9b6;
+  --moss:#3f6b2f;--fern:#5c8a3e;--on-moss:#f4f1e8;--bark:#6b4a2c;--amber:#8f6210;--mist:#8d9a8c;--focus:#7a4f00;
+  --overlay:rgba(21,32,26,.8);--shadow-canopy:0 32px 64px -24px rgba(21,32,26,.3);color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground-0);color:var(--ink);font-family:var(--font-sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ground-0);z-index:40}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:var(--r-sm)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3{font-family:var(--font-display);font-weight:300;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);line-height:1.4}
+.wrap{max-width:1440px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:900px){.wrap{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* cursor */
+.cur{position:fixed;left:0;top:0;pointer-events:none;z-index:60;display:none}
+.cur-dot{position:absolute;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--fern)}
+.cur-ring{position:absolute;width:40px;height:40px;margin:-20px;border-radius:50%;border:1.5px solid var(--fern);opacity:.55;transition:width var(--dur-fast),height var(--dur-fast),margin var(--dur-fast),opacity var(--dur-fast),background var(--dur-fast);display:grid;place-items:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--on-moss)}
+.cur.link .cur-ring{width:64px;height:64px;margin:-32px;opacity:.9}
+.cur.view .cur-ring,.cur.play .cur-ring{width:84px;height:84px;margin:-42px;opacity:1;border-color:transparent}
+.cur.view .cur-ring{background:var(--moss)}
+.cur.play .cur-ring{background:var(--amber)}
+.cur.view .cur-dot,.cur.play .cur-dot{opacity:0}
+.cur.view .cur-ring::after{content:"View"}
+.cur.play .cur-ring::after{content:"Play"}
+@media(hover:hover) and (pointer:fine){body.js .cur{display:block}body.js{cursor:none}body.js a,body.js button{cursor:none}}
+@media(prefers-reduced-motion:reduce){body.js .cur{display:none!important}body.js,body.js a,body.js button{cursor:auto}}
+
+/* nav */
+.nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding:var(--s3) var(--gutter) var(--s5);padding-right:max(16px,env(safe-area-inset-right,0px));color:#15201a;background:linear-gradient(to bottom,rgba(223,240,247,.95) 0%,rgba(223,240,247,.6) 55%,transparent 100%);pointer-events:none;transition:color var(--dur-base),background var(--dur-base)}
+body.scrolled .nav,html[data-scene] .nav{color:var(--ink);background:linear-gradient(to bottom,var(--ground-0) 0%,color-mix(in srgb,var(--ground-0) 70%,transparent) 55%,transparent 100%)}
+.nav a{pointer-events:auto}
+@media(min-width:900px){.nav{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
+.nav .brand{font-family:var(--font-display);font-size:19px;text-decoration:none;letter-spacing:.01em;font-weight:400}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:var(--s4)}
+.nav a.nl{font-size:14px;font-weight:500;letter-spacing:.02em;text-decoration:none;position:relative;padding:var(--s1) 0}
+.nav a.nl::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right var(--dur-base) var(--ease-leaf)}
+.nav a.nl:hover::after,.nav a.nl[aria-current="page"]::after{right:0}
+
+/* hero */
+.hero{position:relative;min-height:88svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ground-0)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-in{position:relative;z-index:2;width:100%;padding-block:var(--s8) var(--s7);--ink:#15201a;--ink-muted:#3d473f;color:var(--ink)}
+.hero h1{font-size:clamp(52px,8.5vw,128px);line-height:1;letter-spacing:-.025em;max-width:12ch}
+.hero p.lead{font-size:clamp(17px,1.6vw,22px);line-height:1.45;max-width:38ch;margin:var(--s4) 0 0;color:var(--ink-muted)}
+.hero .meta-row{display:flex;gap:var(--s5);flex-wrap:wrap;margin-top:var(--s6)}
+.scrollhint{position:absolute;right:var(--gutter);bottom:var(--s4);z-index:2;display:flex;align-items:center;gap:var(--s2);color:#3d473f;--hairline:rgba(21,32,26,.3);--fern:#3f6b2f}
+.scrollhint span{display:block;width:1px;height:48px;background:var(--hairline);position:relative;overflow:hidden}
+.scrollhint span::after{content:"";position:absolute;left:0;top:-48px;width:1px;height:48px;background:var(--fern);animation:drip 2.4s var(--ease-wind) infinite}
+@keyframes drip{to{top:48px}}
+
+/* sections */
+section.block{padding-block:var(--s7)}
+@media(max-width:700px){section.block{padding-block:var(--s6)}}
+.sec-head{display:grid;grid-template-columns:1fr;align-items:end;gap:var(--s4);margin-bottom:var(--s6);border-bottom:1px solid var(--hairline);padding-bottom:var(--s4)}
+@media(min-width:700px){.sec-head{grid-template-columns:1fr auto}}
+.sec-head h2{font-size:clamp(36px,5vw,64px);line-height:.98;letter-spacing:-.015em}
+.sec-head .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--moss);margin-right:var(--s3);vertical-align:middle}
+.sec-head .mark.amber{background:var(--amber)}
+.chips{display:flex;gap:var(--s2);flex-wrap:wrap}
+.chip{font-size:14px;font-weight:500;letter-spacing:.02em;padding:9px 16px;border:1px solid var(--hairline);border-radius:var(--r-pill);transition:background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast)}
+.chip:hover{border-color:var(--fern)}
+.chip[aria-pressed="true"]{background:var(--moss);color:var(--on-moss);border-color:var(--moss)}
+
+/* gallery: uneven cadence */
+.gal{display:grid;grid-template-columns:1fr;row-gap:var(--s6);align-items:start}
+@media(min-width:800px){.gal{grid-template-columns:repeat(12,1fr);column-gap:var(--s5);row-gap:var(--s7)}}
+.work{grid-column:1/-1;min-width:0;text-decoration:none;display:block;transition:opacity var(--dur-base) var(--ease-leaf),transform var(--dur-base) var(--ease-leaf)}
+.work.hide{display:none}
+@media(min-width:800px){
+  .gal>.work:nth-child(8n+1){grid-column:1/8}
+  .gal>.work:nth-child(8n+2){grid-column:9/13;margin-top:var(--s6)}
+  .gal>.work:nth-child(8n+3){grid-column:2/7}
+  .gal>.work:nth-child(8n+4){grid-column:7/13;margin-top:calc(-1*var(--s7))}
+  .gal>.work:nth-child(8n+5){grid-column:1/13}
+  .gal>.work:nth-child(8n+6){grid-column:1/6;margin-top:var(--s6)}
+  .gal>.work:nth-child(8n+7){grid-column:7/12}
+  .gal>.work:nth-child(8n+8){grid-column:3/11}
+  .gal>.work:nth-child(8n+5) .fig{aspect-ratio:21/9}
+}
+.fig{position:relative;overflow:hidden;background:var(--ground-1)}
+.fig img,.fig video{width:100%;height:100%;object-fit:cover;transform:translateY(var(--py,0px)) scale(1.06);transition:transform var(--dur-slow) var(--ease-leaf);will-change:transform}
+.work:hover .fig img{transform:translateY(var(--py,0px)) scale(1.1)}
+@media(prefers-reduced-motion:reduce){.fig img,.fig video,.work:hover .fig img{transform:none}}
+.fig .plinth{position:absolute;inset:auto 0 0 0;height:22%;background:var(--ground-2);z-index:0}
+.fig .play{position:absolute;z-index:2;left:50%;top:50%;width:72px;height:72px;margin:-36px;border-radius:50%;background:var(--amber);display:grid;place-items:center;transition:transform var(--dur-base) var(--ease-leaf)}
+.fig .play svg{width:20px;height:20px;fill:var(--on-moss);margin-left:3px}
+.work:hover .fig .play{transform:scale(1.1)}
+.badge{position:absolute;z-index:2;right:var(--s3);bottom:var(--s3);background:var(--ground-1);color:var(--ink);padding:6px 10px;border-radius:var(--r-sm)}
+.cap{display:grid;grid-template-columns:auto 1fr;gap:var(--s3);margin-top:var(--s3);align-items:baseline}
+.cap .num{color:var(--bark)}
+.cap h3{font-size:clamp(24px,2.6vw,36px);line-height:1.08;letter-spacing:-.01em;font-weight:400}
+.cap .meta{margin-top:var(--s2)}
+.work:hover .cap h3{color:var(--fern)}
+
+/* reveal */
+body.js .rv{opacity:0;transform:translateY(24px);transition:opacity var(--dur-base) var(--ease-leaf),transform var(--dur-base) var(--ease-leaf)}
+body.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){body.js .rv{transform:none;transition-duration:var(--dur-fast)}}
+
+/* films */
+.film-feature{display:grid;grid-template-columns:1fr;gap:var(--s5)}
+@media(min-width:900px){.film-feature{grid-template-columns:7fr 5fr;align-items:end}}
+.film-feature .fig{aspect-ratio:16/9}
+.film-feature .fig::before{content:"";position:absolute;inset:-40%;background:linear-gradient(104deg,transparent 40%,rgba(217,164,65,.16) 50%,transparent 60%);transform:rotate(14deg);z-index:1;pointer-events:none;animation:shaft 9s var(--ease-wind) infinite alternate}
+@keyframes shaft{to{transform:rotate(14deg) translateX(14%)}}
+.film-feature .fig img{position:relative}
+.film-text h3{font-size:clamp(32px,4vw,56px);line-height:1;letter-spacing:-.015em}
+.film-text p{color:var(--ink-muted);max-width:44ch}
+.film-text .meta{color:var(--amber)}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr;gap:var(--s6)}
+@media(min-width:900px){.about{grid-template-columns:5fr 7fr}}
+.quote{font-family:var(--font-display);font-weight:300;font-size:clamp(24px,2.4vw,30px);line-height:1.25;border-top:1px solid var(--bark);padding-top:var(--s4);margin:0;max-width:30ch}
+.prose{max-width:64ch}
+.prose p{margin:0 0 var(--s4)}
+.prose p.lead{font-size:22px;line-height:1.45}
+.cvt{width:100%;border-collapse:collapse;font-size:15px;margin-top:var(--s4)}
+.cvt td{padding:var(--s3) 0;border-top:1px solid var(--hairline);vertical-align:top}
+.cvt td:first-child{white-space:nowrap;padding-right:var(--s4);color:var(--ink-muted);font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.cvt tr:last-child td{border-bottom:1px solid var(--hairline)}
+.contact{margin-top:var(--s7);display:grid;grid-template-columns:1fr;gap:var(--s5)}
+@media(min-width:900px){.contact{grid-template-columns:5fr 7fr}}
+.contact h2{font-size:clamp(36px,5vw,64px);line-height:.98;letter-spacing:-.015em}
+.form{display:grid;gap:var(--s3)}
+.form label{display:grid;gap:var(--s1);font-size:14px;color:var(--ink-muted)}
+.form input,.form textarea{font:inherit;color:var(--ink);background:var(--ground-2);border:1px solid var(--hairline);border-radius:var(--r-sm);padding:12px 14px;width:100%}
+.form textarea{min-height:140px;resize:vertical}
+.btn{display:inline-flex;align-items:center;gap:var(--s2);font-size:14px;font-weight:500;letter-spacing:.02em;padding:12px 22px;border-radius:var(--r-pill);background:var(--moss);color:var(--on-moss);text-decoration:none;transition:background var(--dur-fast),transform var(--dur-base) var(--ease-leaf);justify-self:start}
+.btn:hover{background:var(--fern)}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--hairline)}
+.btn.ghost:hover{border-color:var(--fern);background:none}
+.note{font-size:15px;color:var(--ink-muted);margin:0}
+.msgout{display:grid;gap:var(--s3);background:var(--ground-1);padding:var(--s4);border-radius:var(--r-md)}
+.msgout pre{white-space:pre-wrap;font:inherit;margin:0;color:var(--ink)}
+
+footer{padding-block:var(--s8) var(--s6);color:var(--ink-muted);font-size:15px}
+footer .row{display:flex;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;border-top:1px solid var(--hairline);padding-top:var(--s4)}
+
+/* case study */
+.case{padding-top:calc(var(--s8) - var(--s4))}
+.case .back{display:inline-flex;align-items:center;gap:var(--s2);text-decoration:none;color:var(--ink-muted);margin-bottom:var(--s6)}
+.case .back:hover{color:var(--fern)}
+.case-head{display:grid;grid-template-columns:1fr;gap:var(--s4);margin-bottom:var(--s6)}
+@media(min-width:900px){.case-head{grid-template-columns:8fr 4fr;align-items:end}}
+.case-head h1{font-size:clamp(40px,6vw,92px);line-height:1;letter-spacing:-.025em}
+.specs{display:grid;gap:var(--s2);border-left:1px solid var(--bark);padding-left:var(--s4)}
+.case-hero{margin-inline:calc(-1*var(--gutter));position:relative}
+@media(min-width:900px){.case-hero{margin-inline:0}}
+.case-hero img,.case-hero video{width:100%;height:auto;max-height:88vh;object-fit:contain;background:var(--ground-1)}
+.case-hero.scul img{object-fit:cover;max-height:80vh}
+.case-body{display:grid;grid-template-columns:1fr;gap:var(--s6);padding-block:var(--s7)}
+@media(min-width:900px){.case-body{grid-template-columns:3fr 7fr}}
+.case-body .aside{position:sticky;top:var(--s7);align-self:start}
+.views{display:grid;grid-template-columns:1fr;gap:var(--s5);margin-bottom:var(--s7)}
+@media(min-width:800px){.views{grid-template-columns:1fr 1fr}}
+.views button{display:block;width:100%;background:var(--ground-1)}
+.views img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform var(--dur-slow) var(--ease-leaf)}
+.views button:hover img{transform:scale(1.03)}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);border-top:1px solid var(--hairline);padding-top:var(--s5)}
+.pn a{text-decoration:none;display:grid;gap:var(--s2)}
+.pn a:last-child{text-align:right}
+.pn a .t{font-family:var(--font-display);font-size:clamp(22px,2.6vw,34px);line-height:1.1;font-weight:400}
+.pn a:hover .t{color:var(--fern)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:50;background:var(--overlay);display:grid;place-items:center;padding:var(--s4);padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));opacity:0;pointer-events:none;transition:opacity var(--dur-base) var(--ease-leaf)}
+.lb.open{opacity:1;pointer-events:auto}
+.lb-in{max-width:min(1400px,100%);max-height:100%;display:grid;gap:var(--s3);transform:translateY(16px);transition:transform var(--dur-base) var(--ease-leaf)}
+.lb.open .lb-in{transform:none}
+.lb img,.lb video{max-height:82vh;max-width:100%;width:auto;margin:0 auto;box-shadow:var(--shadow-canopy)}
+.lb .lb-cap{display:flex;justify-content:space-between;gap:var(--s4);align-items:center}
+.lb-x{position:fixed;top:calc(env(safe-area-inset-top,0px) + 16px);right:max(16px,env(safe-area-inset-right,0px));width:48px;height:48px;border-radius:50%;border:1px solid var(--hairline);display:grid;place-items:center;color:var(--ink);background:var(--ground-1)}
+.lb-x svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round}
+
+/* fog transition */
+.fog{position:fixed;inset:0;z-index:45;pointer-events:none;background:linear-gradient(to top,var(--ground-0) 0%,var(--ground-0) 55%,transparent 100%);transform:translateY(100%);opacity:.98}
+.fog.sweep{animation:sweep var(--dur-slow) var(--ease-wind) forwards}
+@keyframes sweep{0%{transform:translateY(100%)}45%{transform:translateY(0)}55%{transform:translateY(0)}100%{transform:translateY(-100%)}}
+@media(prefers-reduced-motion:reduce){.fog.sweep{animation:none}.film-feature .fig::before{animation:none}.scrollhint span::after{animation:none}}
+
+
+/* scene pages: the work colours its own page */
+main{position:relative;z-index:1}
+html[data-scene="light"]{--ink:#15201a;--ink-muted:#3d473f;--ground-1:rgba(255,255,255,.62);--ground-2:rgba(255,255,255,.5);--hairline:rgba(21,32,26,.22);--bark:#6b4a2c;--fern:#2f5f26;--moss:#3f6b2f;--amber:#8f6210;--on-moss:#f4f1e8;--focus:#7a4f00}
+html[data-scene="dark"]{--ink:#f3eee2;--ink-muted:#d6d0c2;--ground-1:rgba(10,14,12,.55);--ground-2:rgba(10,14,12,.45);--hairline:rgba(243,238,226,.25);--bark:#d9b48a;--fern:#c6e39f;--moss:#8fc27a;--amber:#f0c060;--on-moss:#0b120d;--focus:#f0d27a}
+html[data-scene] .nav{background:linear-gradient(to bottom,var(--scene-base) 0%,transparent 100%)}
+html[data-scene] .case-body{background:var(--ground-1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:var(--s5);border-radius:var(--r-md)}
+html[data-scene] .case-head,html[data-scene] .pn{text-shadow:0 1px 18px var(--scene-base)}
+html[data-scene] .fog{background:linear-gradient(to top,var(--scene-base) 0%,var(--scene-base) 55%,transparent 100%)}
+.view{display:none}.view.on{display:block}
+</style>
+</head>
+<body>
+
+
+<div class="cur" id="cur" aria-hidden="true"><div class="cur-ring"></div><div class="cur-dot"></div></div>
+<div class="fog" id="fog" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="#home" data-route="home">Hohyeon Lee</a>
+  <ul>
+    <li><a class="nl" href="#work" data-route="work">Work</a></li>
+    <li><a class="nl" href="#films" data-route="films">Films</a></li>
+    <li><a class="nl" href="#about" data-route="about">About</a></li>
+  </ul>
+</nav>
+
+<main>
+<!-- HOME -->
+<div class="view on" id="v-home">
+  <header class="hero" id="home">
+    <canvas id="forest" aria-hidden="true"></canvas>
+    <div class="hero-in wrap">
+      <p class="meta rv">Paintings · Sculptures · Film</p>
+      <h1 class="rv">Hohyeon Lee</h1>
+      <p class="lead rv">I make work about the lives that are overlooked or sacrificed in the name of human progress, and about the boundaries we draw between ourselves and other living things.</p>
+      <div class="meta-row rv"><span class="meta">Suwon, Korea</span><span class="meta">Works 2025 — 2026</span></div>
+    </div>
+    <div class="scrollhint" aria-hidden="true"><span></span></div>
+  </header>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2><span class="mark"></span>Paintings &amp; Sculptures</h2>
+        <div class="chips" role="group" aria-label="Filter works">
+          <button class="chip" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip" data-filter="painting" aria-pressed="false">Paintings</button>
+          <button class="chip" data-filter="sculpture" aria-pressed="false">Sculptures</button>
+        </div>
+      </div>
+      <div class="gal" id="gal"></div>
+    </div>
+  </section>
+
+  <section class="block" id="films">
+    <div class="wrap">
+      <div class="sec-head rv"><h2><span class="mark amber"></span>Films</h2><span class="meta">Moving image</span></div>
+      <div class="film-feature rv">
+        <a class="work" href="#a-cycle-without-an-end" data-route="a-cycle-without-an-end" data-cur="play" aria-label="Play A Cycle Without an End">
+          <div class="fig"><img src="img/a-cycle-without-an-end-2.jpg" alt="Orange lava and smoke erupting inside the model landscape of A Cycle Without an End" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">56 s</span></div>
+        </a>
+        <div class="film-text">
+          <p class="meta">2026 — Video, colour, sound — 56 s</p>
+          <h3>A Cycle Without an End</h3>
+          <p>The sculpture in time. Inside a moss-covered box, LED light moves a miniature ecosystem through eruption, ash and regrowth, so that disturbance, loss, recovery and renewal play as one continuous loop.</p>
+          <a class="btn ghost" href="#a-cycle-without-an-end" data-route="a-cycle-without-an-end">Watch and read more</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="sec-head rv"><h2><span class="mark"></span>About</h2><span class="meta">Artist statement</span></div>
+      <div class="about">
+        <div class="rv">
+          <p class="quote">When an animal is designed to save our lives, what do we owe it?</p>
+          <table class="cvt" aria-label="At a glance">
+            <tr><td>Based in</td><td>Suwon, Korea</td></tr>
+            <tr><td>Working in</td><td>Watercolour, acrylic, coloured pencil, hanji and mixed-media sculpture, video</td></tr>
+            <tr><td>Series</td><td>Eight works, 2025 — 2026, on animals, boundaries and human progress</td></tr>
+          </table>
+        </div>
+        <div class="prose rv">
+          <p class="lead">As an artist, I am interested in lives that are often overlooked or sacrificed in the name of human progress.</p>
+          <p>The series opens with a world before humans drew clear boundaries between ourselves, animals, nature and the places we built, and moves through the places where those boundaries are felt most sharply: the aquarium tank, the classroom, the living room furnished from the animals on the television, the laboratory where a pig is rewritten to carry a human heart.</p>
+          <p>I work in whatever material the idea needs. Faux fur and yarn rise off a coloured-pencil drawing so that luxury becomes tactile. Real sand and gold paint are mixed into modelling paste for a shore that invites touch. Hanji, traditional Korean mulberry paper, is stretched over rattan so a body can read as both fragile and resilient. Slow hand-stitching stands for care, the opposite of the clinical glove.</p>
+          <p>I am not interested in villainy. Most of us live in indifference, and I would rather show that plainly, then suggest that rebuilding our relationship with nature can begin with something as small as a child reaching through a broken wall.</p>
+        </div>
+      </div>
+      <div class="contact" id="contact">
+        <div class="rv"><h2>Get in touch</h2><p class="note">For exhibitions, commissions and enquiries.</p></div>
+        <form class="form rv" id="cform" novalidate>
+          <label>Your name<input id="f-name" name="name" type="text" autocomplete="name" required></label>
+          <label>Your email<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+          <label>Message<textarea id="f-msg" name="message" required></textarea></label>
+          <button class="btn" type="submit">Prepare message</button>
+          <div class="msgout" id="msgout" hidden>
+            <p class="note">Copy this and send it from your own mail app.</p>
+            <pre id="msgtext"></pre>
+            <button class="btn ghost" type="button" id="copymsg">Copy message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer><div class="wrap"><div class="row"><span>© 2026 Hohyeon Lee. All works are the artist's own.</span><span class="meta">Understory</span></div></div></footer>
+</div>
+
+<!-- CASE STUDY -->
+<div class="view" id="v-case"><div class="wrap case" id="case"></div></div>
+</main>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged view" hidden>
+  <button class="lb-x" id="lbx" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="lb-in" id="lbin"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+document.body.classList.add('js');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- data (order = display order) ---------- */
+const WORKS=[
+ {id:'where-no-one-hurts-them',n:1,title:'Where No One Hurts Them',year:2026,kind:'painting',media:'Watercolour and coloured pencil on paper',dim:'31 × 15.7 in',img:'img/where-no-one-hurts-them',alt:'Watercolour garden filled with light, in which animals rest among flowers and trees',
+  text:['As an artist, I am interested in lives that are often overlooked or sacrificed in the name of human progress. This piece portrays animals that have suffered through cloning and animal testing and imagines a peaceful paradise where they can finally live freely.','I created this work to honor animals that are often treated as objects rather than living beings. By placing them in a bright, colorful garden filled with light and calm, I wanted to transform their suffering into a hopeful vision of freedom and rest. Through my work, I hope to bring attention to lives that are easily forgotten and encourage viewers to reconsider the relationship between human progress and other living beings.']},
+ {id:'reaching-back',n:2,title:'Reaching Back',year:2026,kind:'painting',media:'Acrylic, graffiti marker and watercolour on paper',dim:'18 × 20.8 in',img:'img/reaching-back',alt:'A child reaches through a round opening in a graffiti-covered brick wall toward a lotus pond and animals beyond',
+  text:['This piece explores the blurred boundary between the human-built city and the natural world. The graffiti-covered wall represents a city shaped by constant construction and destruction, while the pond beyond follows a slower rhythm where life continuously grows and renews itself.','Rather than completely separating these two worlds, the broken wall creates an opening for a new relationship. A child reaches toward the animals beyond it, representing an instinctive curiosity toward other living beings and the first attempt to reconnect with what humans have distanced themselves from. Through this small gesture, I wanted to suggest that rebuilding our relationship with nature does not always begin with a dramatic change, but with the simple desire to reach across the boundaries we have created.']},
+ {id:'sun-moon-and-the-flow-of-time',n:3,title:'Sun, Moon, and the Flow of Time',year:2025,kind:'painting',media:'Acrylic on paper',dim:'12 × 16 in',img:'img/sun-moon-flow-of-time',alt:'Figures from different periods of Korean history cross a bridge over blue water, with green mountains, Seoul’s skyline and animals under a sun and a moon',
+  text:['This piece imagines a world before humans drew clear boundaries between ourselves, animals, nature, and the places we built. Figures from different periods of Korean history travel along the same path, while Seoul’s modern skyline, traditional architecture, mountains, and animals coexist within one landscape.','By bringing different times and forms of life together, I wanted to question when we began to see ourselves as separate from the natural world. The animals are not simply part of the scenery; they belong to the same shared environment as the people. As the opening of my series, this work represents connection before separation—a world where human and animal lives exist as parts of the same continuous landscape.']},
+ {id:'a-shared-confinement',n:4,title:'A Shared Confinement',year:2025,kind:'painting',media:'Acrylic, sand and charcoal on canvas',dim:'19.5 × 24.5 in',img:'img/a-shared-confinement',alt:'A boy in school uniform sits on the edge of a glass tank with his feet in turquoise water among dolphins, penguins and a seal; a grey pencil classroom fades behind him',
+  text:['The idea came to me at an aquarium. Watching dolphins and seals circle inside glass tanks, I felt a strange sense of recognition. As a student who spends most of the day in a classroom, I also live inside invisible walls: schedules, expectations, rankings. In this painting, a boy in a school uniform sits on the edge of a tank with his feet in the water, among dolphins, penguins, a seal, and a seagull. Behind him, the classroom fades into gray, drawn in pencil without color, while the shore beyond glows with gold and coral.','The boy isn’t rescuing the animals or escaping. He is simply sharing their space for a moment, aware that he and they are both confined. The glass panels are tilted and broken in perspective, a hint that these boundaries are unstable and could open.','I used acrylic for the water to capture its movement and transparency, and drew the classroom in pencil to make it feel lifeless. For the shore, I mixed real sand and gold paint into modeling paste and built up a rough surface that invites touch. That texture stands for the freedom both the boy and the animals long for.']},
+ {id:'the-cost-of-comfort',n:5,title:'The Cost of Comfort',year:2026,kind:'painting',media:'Coloured pencil and faux fur on paper',dim:'12 × 15 in',img:'img/the-cost-of-comfort',alt:'A woman lies on a crocodile-skin sofa watching a broadcast titled Hunted for Their Skin, surrounded by leopard rugs, fur coats and red heels',
+  text:['The idea came from a contradiction I noticed in myself and the people around me. We feel real sadness at news about endangered animals, yet we rarely connect that sadness to the things we own. In this drawing, a woman lies on a crocodile-skin sofa, watching a live broadcast titled “Hunted for Their Skin,” with a newspaper reading “Killed for Leather” on her lap. Around her are leopard rugs, fur coats, crocodile handbags, and red heels. Her comfort is literally made from the animals on the screen. Her expression is blank, not cruel. I wanted to show indifference rather than villainy, because that is closer to how most of us actually live. The falling graph on the TV ties her room to the real decline of wild populations.','I kept the scene quiet and domestic in colored pencil, but I attached faux fur and yarn to the coat and scarf so their textures rise off the paper. I gave the sofa’s scale pattern a glossy surface to imitate the shine of real leather. Making the materials tactile lets viewers feel how uncomfortably close luxury and loss are.']},
+ {id:'borrowed-heart',n:6,title:'Borrowed Heart',year:2026,kind:'sculpture',media:'Hanji (traditional Korean mulberry paper), rattan core, balloons, thread, beads and acrylic paint',dim:'26 × 17 × 15.5 in',img:'img/borrowed-heart',views:['img/borrowed-heart-2','img/borrowed-heart-3'],alt:'A translucent hanji pig whose body opens like a cage, revealing a red heart, blue vessels and a blue surgical glove, with DNA helixes stitched across its skin',
+  text:['This sculpture was prompted by news about xenotransplantation: gene-edited pigs whose hearts and kidneys are transplanted into human patients. The science amazed me, but it also raised a hard question. When an animal is designed to save our lives, what do we owe it? I built a pig whose body opens like a cage. Inside are a red heart and tangled blood vessels, and a blue surgical glove reaches in to take them. The DNA helixes stitched across its skin show that this animal has been rewritten at the most basic level for human needs.','For the body, I stretched hanji, traditional Korean mulberry paper, over a rattan core. Hanji is strong yet translucent, so it let me show the pig as both fragile and resilient, and its fibers look like skin and veins. I hand-stitched the DNA strands with thread and beads, because slow stitching felt like a quiet act of care, the opposite of the clinical glove. The hollow, caged structure makes the pig read as a container rather than a living being, and it asks viewers to think about where gratitude ends and use begins.']},
+ {id:'harvesting-life',n:7,title:'Harvesting Life',year:2026,kind:'painting',media:'Acrylic on canvas',dim:'12 × 16 in',img:'img/harvesting-life',alt:'A figure with scissors cuts kidney-shaped fruit from a pink, skin-like plant tied with rope in a pot',
+  text:['This painting compares the way humans cultivate plants for harvest with the way animals are bred and genetically altered for human benefit. I was interested in how both plants and animals live under human control without being able to speak for themselves or choose how their bodies are used.','The plant becomes a metaphor for a pig: its pink, hair-like leaves resemble skin, while kidneys grow in place of fruit. A rope tied around the pot suggests confinement and ownership, and the figure cuts the kidneys from the branches as if harvesting produce. The scissors also reference gene editing, connecting cultivation with the genetic modification of animals for organ transplantation. By blurring the boundary between animal and plant, I wanted to question how easily a living being can become a resource once its value is defined by what humans can take from it.']},
+ {id:'a-cycle-without-an-end',n:8,title:'A Cycle Without an End',year:2026,kind:'sculpture',film:true,media:'Clay, paper, tree branches, LED lights, artificial grass, urethane foam and acrylic paint on paperboard; video, 56 s',dim:'9.5 × 9.5 × 3.5 in',img:'img/a-cycle-without-an-end',video:'video/a-cycle-without-an-end.mp4',views:['img/a-cycle-without-an-end-2','img/a-cycle-without-an-end-3'],alt:'A moss-covered paperboard box lit from inside, with a small green mountain, trees and paper animals in a white chamber',
+  text:['This mixed-media sculpture explores natural disasters not simply as events to fear, but as part of the continuous cycle of an ecosystem. After a natural disaster, an ecosystem recovers through different stages. Plants begin to grow again, animals gradually return, and new relationships form within the changed environment.','Humans often fear natural disasters and try to resist or control nature, but some forces of nature exist beyond our control. Rather than viewing every disturbance only as something to prevent, I wanted to explore how we might also understand it as part of nature’s larger rhythm. There is no clear ending in this process: disturbance leads to recovery, recovery creates new growth, and the ecosystem adapts and becomes more resilient. Through changing light and landscape, I show plants and animals recovering together. This endless cycle suggests that change, loss, recovery, and renewal are not separate events, but interconnected stages of a living ecosystem.']}
+];
+const byId=Object.fromEntries(WORKS.map(w=>[w.id,w]));
+const pad=n=>String(n).padStart(2,'0');
+const metaLine=w=>`${w.year} — ${w.media.toUpperCase()} — ${w.dim.toUpperCase()}`;
+
+/* ---------- gallery ---------- */
+const gal=$('#gal');
+gal.innerHTML=WORKS.map(w=>`
+<a class="work rv" href="#${w.id}" data-route="${w.id}" data-kind="${w.kind}" data-cur="${w.film?'play':'view'}">
+  <div class="fig${w.kind==='sculpture'?' scul':''}">${w.kind==='sculpture'&&!w.film?'<span class="plinth"></span>':''}<img src="${w.img}-m.jpg" alt="${w.alt}" loading="lazy" style="position:relative">${w.film?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">56 s</span>':''}</div>
+  <div class="cap"><span class="meta num">${pad(w.n)}</span><div><h3>${w.title}</h3><p class="meta">${w.year} — ${w.kind==='sculpture'?'Sculpture':'Painting'} — ${w.dim}</p></div></div>
+</a>`).join('');
+
+$$('.chip').forEach(c=>c.addEventListener('click',()=>{
+  $$('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c?'true':'false'));
+  const f=c.dataset.filter;
+  $$('#gal .work').forEach(w=>{w.classList.toggle('hide',f!=='all'&&w.dataset.kind!==f);});
+  requestAnimationFrame(observeAll);
+}));
+
+/* ---------- case study ---------- */
+function renderCase(w){
+  const i=WORKS.indexOf(w), prev=WORKS[(i-1+WORKS.length)%WORKS.length], next=WORKS[(i+1)%WORKS.length];
+  const hero=w.video
+    ?`<video id="casevid" src="${w.video}" poster="${w.img}.jpg" controls playsinline preload="metadata" aria-label="${w.title}, video"></video>`
+    :`<button type="button" class="zoom" data-zoom="${w.img}.jpg" data-alt="${w.alt}" data-cap="${w.title}" aria-label="Enlarge ${w.title}" data-cur="view" style="display:block;width:100%"><img src="${w.img}.jpg" alt="${w.alt}"></button>`;
+  const views=(w.views||[]).map((v,k)=>`<button type="button" class="zoom" data-zoom="${v}.jpg" data-alt="${w.title}, view ${k+2}" data-cap="${w.title} — view ${k+2}" data-cur="view"><img src="${v}-m.jpg" alt="${w.title}, view ${k+2}" loading="lazy"></button>`).join('');
+  $('#case').innerHTML=`
+  <a class="back" href="#work" data-route="home" data-target="work"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All work</a>
+  <div class="case-head rv in">
+    <h1>${w.title}</h1>
+    <div class="specs">
+      <span class="meta">${pad(w.n)} / ${pad(WORKS.length)}</span>
+      <span class="meta">${w.year}</span>
+      <span class="meta">${w.kind==='sculpture'?'Sculpture':'Painting'}${w.film?' · Video':''}</span>
+      <span class="meta">${w.dim}</span>
+    </div>
+  </div>
+  <div class="case-hero rv in${w.kind==='sculpture'?' scul':''}">${hero}</div>
+  <div class="case-body">
+    <aside class="aside rv in">
+      <p class="meta" style="color:var(--bark)">Materials</p>
+      <p style="margin:var(--s2) 0 0;font-size:15px;max-width:30ch">${w.media}</p>
+      ${w.film?'<p class="meta" style="margin-top:var(--s4);color:var(--amber)">Film — 56 s, colour, sound</p>':''}
+    </aside>
+    <div class="prose">${w.text.map((p,k)=>`<p class="rv in${k===0?' lead':''}">${p}</p>`).join('')}</div>
+  </div>
+  ${views?`<div class="views rv in">${views}</div>`:''}
+  <nav class="pn rv in" aria-label="Previous and next work">
+    <a href="#${prev.id}" data-route="${prev.id}"><span class="meta">← Previous</span><span class="t">${prev.title}</span></a>
+    <a href="#${next.id}" data-route="${next.id}"><span class="meta">Next →</span><span class="t">${next.title}</span></a>
+  </nav>`;
+}
+
+/* ---------- routing ---------- */
+const views={home:$('#v-home'),case:$('#v-case')};
+let current='',currentId=null;
+function go(route,target,push){
+  const w=byId[route];
+  const isHome=!w;
+  const doShow=()=>{
+    if(w){renderCase(w);views.home.classList.remove('on');views.case.classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
+    else{views.case.classList.remove('on');views.home.classList.add('on');
+      const t=target||(['work','films','about','contact'].includes(route)?route:null);
+      if(t){const el=document.getElementById(t);if(el){const y=el.getBoundingClientRect().top+scrollY-24;window.scrollTo({top:y,behavior:push?'smooth':'instant'});}}
+      else if(push) window.scrollTo({top:0,behavior:'instant'});
+    }
+    $$('.nav a.nl').forEach(a=>{const r=a.dataset.route;a.setAttribute('aria-current',(isHome&&(r===(target||route)))?'page':'false');});
+    document.title=w?`${w.title} — Hohyeon Lee`:'Hohyeon Lee';
+    currentId=w?w.id:null;setScene(currentId);document.body.classList.toggle('scrolled',!!w||scrollY>innerHeight*.55);
+    if(w&&SCENES[w.id]){document.documentElement.dataset.scene=SCENES[w.id].dark?'dark':'light';}else{delete document.documentElement.dataset.scene;}
+    requestAnimationFrame(observeAll);
+  };
+  const changesView=(!!w)!==(current==='case');
+  if(push&&changesView&&!RM){const fog=$('#fog');fog.classList.remove('sweep');void fog.offsetWidth;fog.classList.add('sweep');setTimeout(doShow,620);}
+  else doShow();
+  current=w?'case':'home';
+  try{if(push)history.replaceState(null,'','#'+(w?w.id:(target||route)));}catch(e){}
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[data-route]');if(!a)return;
+  e.preventDefault();go(a.dataset.route,a.dataset.target,true);
+});
+addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&byId[h])go(h,null,false);else if(h)go('home',h,false);});
+
+/* ---------- reveal on scroll ---------- */
+let io;
+function observeAll(){
+  if(!io){io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});}
+  $$('.rv:not(.in)').forEach((el,k)=>{el.style.transitionDelay=(k%6)*80+'ms';io.observe(el);});
+}
+observeAll();
+/* first screen is visible at rest */
+$$('.hero .rv').forEach(el=>el.classList.add('in'));
+
+/* ---------- scroll parallax on gallery images ---------- */
+let ticking=false;
+function parallax(){
+  ticking=false;if(RM)return;
+  const vh=innerHeight;
+  $$('.view.on .fig img').forEach(img=>{
+    const r=img.parentElement.getBoundingClientRect();if(r.bottom<0||r.top>vh)return;
+    const p=(r.top+r.height/2-vh/2)/vh;
+    img.style.setProperty('--py',(p*-18).toFixed(1)+'px');
+  });
+}
+addEventListener('scroll',()=>{document.body.classList.toggle('scrolled',scrollY>innerHeight*.55||current==='case');if(!ticking){ticking=true;requestAnimationFrame(parallax);}},{passive:true});
+parallax();
+
+/* ---------- lightbox ---------- */
+const lb=$('#lb'),lbin=$('#lbin');let lastFocus=null;
+function openLB(src,alt,cap){
+  lastFocus=document.activeElement;
+  lbin.innerHTML=`<img src="${src}" alt="${alt}"><div class="lb-cap"><span class="meta">${cap}</span><span class="meta">Esc to close</span></div>`;
+  lb.hidden=false;requestAnimationFrame(()=>lb.classList.add('open'));document.body.style.overflow='hidden';$('#lbx').focus();
+}
+function closeLB(){lb.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{lb.hidden=true;lbin.innerHTML='';},600);if(lastFocus)lastFocus.focus();}
+document.addEventListener('click',e=>{const b=e.target.closest('button.zoom');if(b)openLB(b.dataset.zoom,b.dataset.alt,b.dataset.cap);});
+$('#lbx').addEventListener('click',closeLB);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)closeLB();});
+
+/* ---------- contact (no server: prepares text to copy) ---------- */
+$('#cform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=$('#f-name').value.trim(),m=$('#f-email').value.trim(),t=$('#f-msg').value.trim();
+  if(!n||!m||!t){$('#msgout').hidden=false;$('#msgtext').textContent='Please fill in your name, email and a message first.';return;}
+  $('#msgtext').textContent=`To: Hohyeon Lee\nFrom: ${n} <${m}>\n\n${t}`;$('#msgout').hidden=false;
+});
+$('#copymsg').addEventListener('click',async()=>{
+  const txt=$('#msgtext').textContent;const b=$('#copymsg');
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copied';}
+  catch(err){const r=document.createRange();r.selectNodeContents($('#msgtext'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected — press Ctrl/Cmd+C';}
+  setTimeout(()=>b.textContent='Copy message',2000);
+});
+
+/* ---------- custom cursor ---------- */
+const cur=$('#cur');let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy;
+addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;const t=e.target.closest('[data-cur],a,button');cur.className='cur'+(t?(t.dataset.cur?' '+t.dataset.cur:' link'):'');},{passive:true});
+(function loopCur(){cx+=(tx-cx)*.35;cy+=(ty-cy)*.35;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loopCur);})();
+
+/* ---------- the forest: a colourful painted canopy with animals ---------- */
+const cv=$('#forest'),ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1,layers=[],px=0,py=0,tpx=0,tpy=0,t0=performance.now(),birds=[],flies=[],petals=[],animals=[];
+function rnd(a,b){return a+Math.random()*(b-a);}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+const PAL={sky1:'#dff0f7',sky2:'#fbf3dc',sun:'#ffe9a8',hillA:'#bcd9c2',hillB:'#8fc2a0',hillC:'#5fa37c',
+  trunk:['#7a5236','#8d6a4a','#5f3f2b'],
+  crowns:['#8fcf6e','#5fae57','#b7df72','#3f8f5a','#f4c66b','#f2a8bf','#d8e38a','#6fbf9a','#e58f73'],
+  flowers:['#f58fb0','#ffd166','#c9a7f0','#ffffff','#ff8a65','#8fd3ff'],
+  animal:['#6b4a2c','#8a5a34','#a57a4a','#4a3b30']};
+function blob(c,x,y,r,col,a){c.globalAlpha=a;c.fillStyle=col;c.beginPath();c.ellipse(x,y,r,r*rnd(.75,1),rnd(0,3),0,7);c.fill();c.globalAlpha=1;}
+function tree(c,x,base,h,w){
+  const tcol=pick(PAL.trunk);c.fillStyle=tcol;c.strokeStyle=tcol;c.lineCap='round';
+  c.beginPath();c.moveTo(x-w/2,base);c.quadraticCurveTo(x-w*.1,base-h*.6,x-w*.14,base-h);c.lineTo(x+w*.14,base-h);c.quadraticCurveTo(x+w*.1,base-h*.6,x+w/2,base);c.closePath();c.fill();
+  const main=pick(PAL.crowns),second=pick(PAL.crowns);
+  const n=3+Math.floor(rnd(2,5));
+  for(let i=0;i<n;i++){const y=base-h*rnd(.4,.95);const dir=i%2?1:-1;const len=h*rnd(.14,.32);const ang=rnd(.3,.9);
+    c.lineWidth=Math.max(1.2,w*.16);c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+dir*len*.5,y-len*.4,x+dir*len*Math.cos(ang),y-len*Math.sin(ang));c.stroke();
+    const fx=x+dir*len*Math.cos(ang),fy=y-len*Math.sin(ang);const m=Math.floor(rnd(4,8));
+    for(let k=0;k<m;k++)blob(c,fx+rnd(-len*.5,len*.5),fy+rnd(-len*.3,len*.25),rnd(len*.14,len*.34),k%3?main:second,.82);
+  }
+  const m=Math.floor(rnd(7,13));
+  for(let k=0;k<m;k++)blob(c,x+rnd(-w*2.4,w*2.4),base-h+rnd(-h*.1,h*.14),rnd(w*.9,w*2.6),k%4?main:second,.85);
+}
+function fernPlant(c,x,base,s,col){
+  c.strokeStyle=col;c.lineWidth=Math.max(1,s*.035);c.lineCap='round';
+  const n=Math.floor(rnd(3,6));
+  for(let i=0;i<n;i++){const a=-Math.PI/2+rnd(-.9,.9);const L=s*rnd(.6,1);
+    c.beginPath();c.moveTo(x,base);c.quadraticCurveTo(x+Math.cos(a)*L*.5+rnd(-s*.2,s*.2),base+Math.sin(a)*L*.5,x+Math.cos(a)*L,base+Math.sin(a)*L);c.stroke();
+    const leaves=Math.floor(L/(s*.08));
+    for(let k=2;k<leaves;k++){const t=k/leaves;const lx=x+Math.cos(a)*L*t,ly=base+Math.sin(a)*L*t;const ll=s*.14*(1-t)+s*.03;
+      c.beginPath();c.moveTo(lx,ly);c.lineTo(lx+Math.cos(a+1.2)*ll,ly+Math.sin(a+1.2)*ll);c.moveTo(lx,ly);c.lineTo(lx+Math.cos(a-1.2)*ll,ly+Math.sin(a-1.2)*ll);c.stroke();}
+  }
+}
+function flower(c,x,y,r){const col=pick(PAL.flowers);c.fillStyle=col;for(let i=0;i<5;i++){const a=i/5*6.283;c.beginPath();c.arc(x+Math.cos(a)*r,y+Math.sin(a)*r,r*.8,0,7);c.fill();}c.fillStyle='#ffd166';c.beginPath();c.arc(x,y,r*.6,0,7);c.fill();}
+/* animals: simple painted silhouettes */
+function deer(c,x,y,s,col,flip){
+  c.save();c.translate(x,y);c.scale(flip?-s:s,s);c.fillStyle=col;c.strokeStyle=col;c.lineCap='round';c.lineWidth=5;
+  c.beginPath();c.ellipse(0,0,46,22,0,0,7);c.fill(); // body
+  c.beginPath();c.moveTo(36,-10);c.quadraticCurveTo(52,-30,56,-52);c.lineTo(66,-52);c.quadraticCurveTo(60,-26,48,-2);c.closePath();c.fill(); // neck
+  c.beginPath();c.ellipse(64,-56,14,8,-.3,0,7);c.fill(); // head
+  c.beginPath();c.moveTo(70,-62);c.lineTo(78,-74);c.moveTo(70,-62);c.lineTo(84,-66);c.lineWidth=3;c.stroke(); // ears
+  c.lineWidth=3;c.beginPath();c.moveTo(60,-64);c.lineTo(52,-92);c.lineTo(42,-98);c.moveTo(52,-92);c.lineTo(58,-104);c.moveTo(62,-64);c.lineTo(70,-94);c.lineTo(80,-100);c.moveTo(70,-94);c.lineTo(66,-106);c.stroke(); // antlers
+  c.lineWidth=6;[-30,-16,16,30].forEach((lx,i)=>{c.beginPath();c.moveTo(lx,12);c.lineTo(lx+(i%2?4:-4),54);c.stroke();}); // legs
+  c.beginPath();c.moveTo(-44,-6);c.lineTo(-56,-14);c.stroke(); // tail
+  c.restore();
+}
+function rabbit(c,x,y,s,col,flip){
+  c.save();c.translate(x,y);c.scale(flip?-s:s,s);c.fillStyle=col;
+  c.beginPath();c.ellipse(0,0,22,15,0,0,7);c.fill();
+  c.beginPath();c.arc(22,-8,10,0,7);c.fill();
+  c.beginPath();c.ellipse(20,-28,4,14,-.15,0,7);c.fill();c.beginPath();c.ellipse(28,-27,4,14,.2,0,7);c.fill();
+  c.beginPath();c.arc(-22,-2,6,0,7);c.fill();
+  c.restore();
+}
+function fox(c,x,y,s,col,flip){
+  c.save();c.translate(x,y);c.scale(flip?-s:s,s);c.fillStyle=col;c.strokeStyle=col;c.lineCap='round';
+  c.beginPath();c.ellipse(0,0,34,15,0,0,7);c.fill();
+  c.beginPath();c.moveTo(26,-8);c.lineTo(50,-12);c.lineTo(40,4);c.closePath();c.fill(); // head
+  c.beginPath();c.moveTo(30,-12);c.lineTo(28,-26);c.lineTo(38,-14);c.closePath();c.fill();c.beginPath();c.moveTo(40,-12);c.lineTo(44,-26);c.lineTo(48,-12);c.closePath();c.fill(); // ears
+  c.lineWidth=12;c.beginPath();c.moveTo(-30,-2);c.quadraticCurveTo(-56,-6,-62,-26);c.stroke(); // tail
+  c.lineWidth=4;[-18,-8,10,20].forEach((lx,i)=>{c.beginPath();c.moveTo(lx,8);c.lineTo(lx+(i%2?3:-3),34);c.stroke();});
+  c.restore();
+}
+function bird(c,x,y,s,col,ph){
+  c.save();c.translate(x,y);c.scale(s,s);c.strokeStyle=col;c.lineWidth=2.2;c.lineCap='round';
+  const f=Math.sin(ph)*8;c.beginPath();c.moveTo(-16,-f*.3);c.quadraticCurveTo(-8,-10+f,0,0);c.quadraticCurveTo(8,-10+f,16,-f*.3);c.stroke();c.restore();
+}
+function butterfly(c,x,y,s,col,ph){
+  c.save();c.translate(x,y);c.scale(s,s);const f=Math.abs(Math.cos(ph))*.9+.1;c.fillStyle=col;c.globalAlpha=.9;
+  c.beginPath();c.ellipse(-7*f,-4,7*f,6,0,0,7);c.fill();c.beginPath();c.ellipse(7*f,-4,7*f,6,0,0,7);c.fill();
+  c.beginPath();c.ellipse(-5*f,4,5*f,4,0,0,7);c.fill();c.beginPath();c.ellipse(5*f,4,5*f,4,0,0,7);c.fill();
+  c.fillStyle='#4a3b30';c.beginPath();c.ellipse(0,0,1.5,7,0,0,7);c.fill();c.restore();
+}
+function layerCanvas(){const c=document.createElement('canvas');c.width=Math.ceil(W*1.2*DPR);c.height=Math.ceil(H*1.2*DPR);const g=c.getContext('2d');g.scale(DPR,DPR);return {c,g};}
+function build(){
+  const r=cv.getBoundingClientRect();W=r.width;H=r.height;DPR=Math.min(devicePixelRatio||1,2);
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  const LW=W*1.2,LH=H*1.2;
+  // sky + hills
+  const back=layerCanvas();{const g=back.g;const sky=g.createLinearGradient(0,0,0,LH);sky.addColorStop(0,PAL.sky1);sky.addColorStop(.7,PAL.sky2);sky.addColorStop(1,'#eaf2d8');g.fillStyle=sky;g.fillRect(0,0,LW,LH);
+    const sun=g.createRadialGradient(LW*.74,LH*.16,0,LW*.74,LH*.16,LW*.22);sun.addColorStop(0,PAL.sun);sun.addColorStop(.25,'rgba(255,233,168,.55)');sun.addColorStop(1,'rgba(255,233,168,0)');g.fillStyle=sun;g.fillRect(0,0,LW,LH);
+    [[PAL.hillA,.62,.08],[PAL.hillB,.7,.07],[PAL.hillC,.78,.06]].forEach(([col,yy,amp],i)=>{g.fillStyle=col;g.globalAlpha=.9;g.beginPath();g.moveTo(0,LH);for(let x=0;x<=LW;x+=8){g.lineTo(x,LH*yy+Math.sin(x/(LW*.18)+i*2)*LH*amp+Math.sin(x/(LW*.05)+i)*LH*.015);}g.lineTo(LW,LH);g.closePath();g.fill();g.globalAlpha=1;});}
+  const far=layerCanvas();for(let i=0;i<Math.round(W/140)+3;i++)tree(far.g,rnd(-LW*.05,LW*1.05),LH*rnd(.86,.98),LH*rnd(.3,.55),rnd(7,14));
+  const mid=layerCanvas();for(let i=0;i<Math.round(W/170)+2;i++)tree(mid.g,rnd(-LW*.05,LW*1.05),LH*rnd(.96,1.04),LH*rnd(.45,.8),rnd(12,24));
+  // ground with flowers, ferns and resting animals
+  const near=layerCanvas();{const g=near.g;g.fillStyle='#a9d37f';g.globalAlpha=.95;g.beginPath();g.moveTo(0,LH);for(let x=0;x<=LW;x+=8)g.lineTo(x,LH*.9+Math.sin(x/90)*6);g.lineTo(LW,LH);g.closePath();g.fill();g.globalAlpha=1;
+    for(let i=0;i<Math.round(W/60);i++)fernPlant(g,rnd(0,LW),LH*rnd(.9,1.02),rnd(50,120),pick(['#4f9a4a','#6fb05e','#3f7f45']));
+    for(let i=0;i<Math.round(W/9);i++)flower(g,rnd(0,LW),LH*rnd(.9,1.08),rnd(2.5,5));
+    for(let i=0;i<Math.round(W/90);i++)tree(g,rnd(-LW*.05,LW*1.05),LH*rnd(1.02,1.1),LH*rnd(.5,.9),rnd(16,30));}
+  const kinds=[deer,fox,rabbit,deer,rabbit];const n=Math.min(kinds.length,Math.max(2,Math.round(W/380)));
+  animals=Array.from({length:n},(_,i)=>({fn:kinds[i],x:.1+i*(.8/n)+rnd(-.03,.03),y:rnd(.74,.86),s:kinds[i]===deer?rnd(.8,1.05):kinds[i]===fox?rnd(.8,1):rnd(.8,1.1),col:pick(PAL.animal),flip:Math.random()<.5,ph:rnd(0,7)}));
+  layers=[{c:back.c,d:.05},{c:far.c,d:.14},{c:mid.c,d:.3},{c:near.c,d:.55}];
+  birds=Array.from({length:Math.max(3,Math.round(W/260))},()=>({x:rnd(-W*.3,W*1.2),y:rnd(H*.08,H*.4),s:rnd(.6,1.2),v:rnd(18,40),ph:rnd(0,7),col:pick(['#3b3b3b','#5b4a3a','#7a6a5a'])}));
+  flies=Array.from({length:Math.max(4,Math.round(W/150))},()=>({x:rnd(0,W),y:rnd(H*.5,H*.9),r:rnd(30,80),s:rnd(.7,1.3),sp:rnd(.3,.7),ph:rnd(0,7),col:pick(['#ffb347','#ff6f91','#ffd93d','#8fd3ff','#c9a7f0','#ffffff'])}));
+  petals=Array.from({length:Math.round(W/40)},()=>({x:rnd(0,W),y:rnd(-H,H),v:rnd(8,20),sw:rnd(10,30),ph:rnd(0,7),col:pick(PAL.flowers),r:rnd(2,4)}));
+}
+function frame(now){
+  requestAnimationFrame(frame);
+  if(scrollY>H||!views.home.classList.contains('on'))return;
+  const t=(now-t0)/1000;
+  px+=(tpx-px)*.04;py+=(tpy-py)*.04;
+  const sc=Math.min(scrollY,H);
+  ctx.clearRect(0,0,W,H);
+  layers.forEach((L,i)=>{
+    const sway=RM?0:Math.sin(t*.25+i)*6*L.d;
+    const ox=-W*.1+px*L.d*70+sway, oy=-H*.1+py*L.d*30+sc*L.d*.9;
+    ctx.drawImage(L.c,ox,oy,W*1.2,H*1.2);
+    if(i===1){// birds between the hills and the trees
+      birds.forEach(b=>{const x=RM?b.x:((b.x+t*b.v)%(W*1.5))-W*.25;const y=b.y+Math.sin(t*.7+b.ph)*8+sc*.1;bird(ctx,x,y,b.s,b.col,RM?0:t*9+b.ph);});
+    }
+    if(i===2){// light mist over the middle distance
+      const fg=ctx.createLinearGradient(0,H*.5,0,H);fg.addColorStop(0,'rgba(255,255,255,0)');fg.addColorStop(1,'rgba(255,255,255,.28)');ctx.fillStyle=fg;ctx.fillRect(0,0,W,H);
+    }
+  });
+  animals.forEach(a=>{const bob=RM?0:Math.sin(t*.6+a.ph)*2;a.fn(ctx,a.x*W+px*25,a.y*H+bob+sc*.5,a.s*Math.min(1,W/1100),a.col,a.flip);});
+  if(!RM){
+    petals.forEach(p=>{const y=(p.y+t*p.v)%(H+40)-20;const x=p.x+Math.sin(t*.8+p.ph)*p.sw+px*20;ctx.globalAlpha=.8;ctx.fillStyle=p.col;ctx.beginPath();ctx.ellipse(x,y,p.r,p.r*.6,t+p.ph,0,7);ctx.fill();});ctx.globalAlpha=1;
+    flies.forEach(f=>{const x=f.x+Math.cos(t*f.sp+f.ph)*f.r+px*30,y=f.y+Math.sin(t*f.sp*1.7+f.ph)*f.r*.5+sc*.4;butterfly(ctx,x,y,f.s,f.col,t*14+f.ph);});
+  } else {flies.forEach(f=>butterfly(ctx,f.x,f.y,f.s,f.col,1));}
+  // light shafts
+  if(!RM){ctx.save();for(let i=0;i<3;i++){const x=W*(.5+i*.16)+Math.sin(t*.15+i)*30+px*.3;const grd=ctx.createLinearGradient(x,0,x+180,H);grd.addColorStop(0,'rgba(255,240,190,.28)');grd.addColorStop(1,'rgba(255,240,190,0)');ctx.fillStyle=grd;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+120,0);ctx.lineTo(x+320,H);ctx.lineTo(x+40,H);ctx.closePath();ctx.fill();}ctx.restore();}
+  // haze so the name reads, then a fade into the page ground
+  const gf=ctx.createLinearGradient(0,H*.35,0,H*.8);gf.addColorStop(0,'rgba(248,243,228,0)');gf.addColorStop(1,'rgba(248,243,228,.55)');ctx.fillStyle=gf;ctx.fillRect(0,0,W,H);
+  const tx=ctx.createRadialGradient(W*.22,H*.62,0,W*.22,H*.62,W*.42);tx.addColorStop(0,'rgba(248,243,228,.6)');tx.addColorStop(1,'rgba(248,243,228,0)');ctx.fillStyle=tx;ctx.fillRect(0,0,W,H);
+  const g0=C.g0;const ef=ctx.createLinearGradient(0,H*.82,0,H);ef.addColorStop(0,g0+'00');ef.addColorStop(1,g0+'ff');ctx.fillStyle=ef;ctx.fillRect(0,0,W,H);
+}
+let C={};
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function theme(){C={g0:css('--ground-0')};}
+addEventListener('pointermove',e=>{tpx=(e.clientX/innerWidth-.5)*2;tpy=(e.clientY/innerHeight-.5)*2;},{passive:true});
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(build,200);});
+matchMedia('(prefers-color-scheme: light)').addEventListener('change',theme);
+theme();build();requestAnimationFrame(frame);
+
+/* ---------- case-study atmospheres: each work colours its own page ---------- */
+const SCENES={
+ 'where-no-one-hurts-them':{dark:false,cols:['#cfe8f3','#b7e08f','#f6c6d9','#ffe08a','#8fd3c2'],motif:'petals',base:'#f4f1e8'},
+ 'reaching-back':{dark:false,cols:['#8b3a2f','#f3b6c9','#9fc49a','#ffd23f','#3fa7ff','#e8e1cd'],motif:'lotus',base:'#efe9dc'},
+ 'sun-moon-and-the-flow-of-time':{dark:true,cols:['#16204f','#6fbf6a','#2f6fb0','#b3cf93','#c63a33','#f2f2e6'],motif:'hills',base:'#1a2550'},
+ 'a-shared-confinement':{dark:true,cols:['#3fb3b0','#88c0bf','#d9b36a','#2f4048','#8d8d8d','#f1d9a5'],motif:'water',base:'#1f4b50'},
+ 'the-cost-of-comfort':{dark:false,cols:['#c8c3cc','#5f8e92','#8a5c4a','#c4333a','#9ba6b1','#efe7f0'],motif:'room',base:'#b9b3bf'},
+ 'borrowed-heart':{dark:true,cols:['#0a0a0c','#e9e4dc','#c8362f','#3b74d9','#564e59'],motif:'helix',base:'#0b0b0e'},
+ 'harvesting-life':{dark:false,cols:['#e9a2b2','#7aa37a','#b5583c','#6b7f9a','#f3d8d0','#d6c2ae'],motif:'leaves',base:'#e8cfcf'},
+ 'a-cycle-without-an-end':{dark:true,cols:['#4f7a2e','#f4c27a','#f2522b','#fbf6ee','#8fbf5a','#3c3c1a'],motif:'embers',base:'#2c3b1a'}
+};
+const scv=document.createElement('canvas');scv.id='scene';scv.setAttribute('aria-hidden','true');scv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:none';document.body.prepend(scv);
+const sctx=scv.getContext('2d');let scene=null,sw=0,sh=0,sparts=[],sblobs=[],st0=performance.now();
+function setScene(id){
+  const S=SCENES[id];if(!S){scene=null;scv.style.display='none';document.documentElement.style.removeProperty('--scene-base');return;}
+  scene=S;scv.style.display='block';document.documentElement.style.setProperty('--scene-base',S.base);
+  sw=innerWidth;sh=innerHeight;const d=Math.min(devicePixelRatio||1,2);scv.width=sw*d;scv.height=sh*d;sctx.setTransform(d,0,0,d,0,0);
+  sblobs=Array.from({length:9},(_,i)=>({x:rnd(0,sw),y:rnd(0,sh),r:rnd(sw*.18,sw*.42),col:S.cols[i%S.cols.length],sp:rnd(.05,.14),ph:rnd(0,7)}));
+  const n=S.motif==='room'?0:Math.round(sw/30);
+  sparts=Array.from({length:n},()=>({x:rnd(0,sw),y:rnd(0,sh),r:rnd(2,9),v:rnd(6,22),sw:rnd(6,40),ph:rnd(0,7),col:S.cols[Math.floor(rnd(1,S.cols.length))]}));
+}
+function hex(c,a){return c+Math.round(a*255).toString(16).padStart(2,'0');}
+function sceneFrame(now){
+  requestAnimationFrame(sceneFrame);if(!scene)return;
+  if(innerWidth!==sw||innerHeight!==sh){setScene(current==='case'?currentId:null);if(!scene)return;}
+  const t=(now-st0)/1000,S=scene,sc=scrollY;
+  sctx.fillStyle=S.base;sctx.fillRect(0,0,sw,sh);
+  sblobs.forEach((b,i)=>{const x=b.x+Math.cos(t*b.sp+b.ph)*sw*.08+px*20*(i%3),y=b.y+Math.sin(t*b.sp*1.3+b.ph)*sh*.08-sc*.08*(i%3);const g=sctx.createRadialGradient(x,y,0,x,y,b.r);g.addColorStop(0,hex(b.col,.85));g.addColorStop(1,hex(b.col,0));sctx.fillStyle=g;sctx.fillRect(x-b.r,y-b.r,b.r*2,b.r*2);});
+  const m=S.motif;sctx.lineCap='round';
+  if(m==='hills'){[['#6fbf6a',.72],['#4f9f5a',.8],['#2f6fb0',.9]].forEach(([col,yy],i)=>{sctx.fillStyle=hex(col,.8);sctx.beginPath();sctx.moveTo(0,sh);for(let x=0;x<=sw;x+=10)sctx.lineTo(x,sh*yy+Math.sin(x/(sw*.16)+i+t*.05)*sh*.05-sc*.05*(i+1));sctx.lineTo(sw,sh);sctx.closePath();sctx.fill();});
+    sctx.fillStyle='#f2f2e6';sctx.beginPath();sctx.arc(sw*.18,sh*.22-sc*.1,28,0,7);sctx.fill();sctx.fillStyle='#c63a33';sctx.beginPath();sctx.arc(sw*.82,sh*.2-sc*.1,30,0,7);sctx.fill();}
+  if(m==='water'){sctx.strokeStyle='rgba(255,255,255,.35)';sctx.lineWidth=1.5;for(let i=0;i<14;i++){const y=sh*(.1+i*.065)+Math.sin(t*.5+i)*6-sc*.1;sctx.beginPath();for(let x=0;x<=sw;x+=12)sctx.lineTo(x,y+Math.sin(x/70+t+i)*5);sctx.stroke();}}
+  if(m==='room'){sctx.fillStyle='rgba(255,255,255,.22)';sctx.fillRect(sw*.08,sh*.12-sc*.05,sw*.3,sh*.5);sctx.fillStyle='rgba(95,142,146,.5)';sctx.fillRect(0,sh*.72-sc*.03,sw,sh*.3);const g=sctx.createRadialGradient(sw*.75,sh*.3,0,sw*.75,sh*.3,sw*.3);g.addColorStop(0,'rgba(255,220,160,.6)');g.addColorStop(1,'rgba(255,220,160,0)');sctx.fillStyle=g;sctx.fillRect(0,0,sw,sh);}
+  if(RM)return;
+  sparts.forEach((p,i)=>{
+    if(m==='petals'||m==='leaves'){const y=(p.y+t*p.v)%(sh+40)-20,x=p.x+Math.sin(t*.8+p.ph)*p.sw;sctx.globalAlpha=.85;sctx.fillStyle=p.col;sctx.beginPath();sctx.ellipse(x,y,p.r,p.r*.55,t*.6+p.ph,0,7);sctx.fill();}
+    else if(m==='lotus'){const x=p.x,y=(p.y-sc*.15+sh*4)%sh;sctx.globalAlpha=.55;sctx.fillStyle=i%3?'#9fc49a':'#f3b6c9';sctx.beginPath();sctx.arc(x,y,p.r*3,0,7);sctx.fill();sctx.globalAlpha=.25;sctx.strokeStyle='#ffffff';sctx.lineWidth=1;sctx.beginPath();sctx.arc(x,y,p.r*3+((t*8+p.ph*10)%40),0,7);sctx.stroke();}
+    else if(m==='water'){const y=(p.y-t*p.v*.6+sh*4)%sh,x=p.x+Math.sin(t+p.ph)*6;sctx.globalAlpha=.5;sctx.strokeStyle='#ffffff';sctx.lineWidth=1;sctx.beginPath();sctx.arc(x,y,p.r*.6,0,7);sctx.stroke();}
+    else if(m==='helix'){const y=(p.y-t*p.v*.4+sh*4)%sh,x=p.x+Math.sin(t*1.2+p.ph)*10;sctx.globalAlpha=.9;sctx.fillStyle=i%2?'#c8362f':'#3b74d9';sctx.beginPath();sctx.arc(x,y,p.r*.4,0,7);sctx.fill();}
+    else if(m==='embers'){const y=(p.y-t*p.v+sh*4)%sh,x=p.x+Math.sin(t*2+p.ph)*8;sctx.globalAlpha=.4+.5*Math.abs(Math.sin(t*3+p.ph));sctx.fillStyle=i%4?'#f4c27a':'#f2522b';sctx.beginPath();sctx.arc(x,y,p.r*.35,0,7);sctx.fill();}
+    else if(m==='hills'){const y=(p.y-t*p.v*.2+sh*4)%sh;sctx.globalAlpha=.3+.6*Math.abs(Math.sin(t*1.5+p.ph));sctx.fillStyle='#ffffff';sctx.beginPath();sctx.arc(p.x,y*.6,p.r*.2,0,7);sctx.fill();}
+  });sctx.globalAlpha=1;
+}
+requestAnimationFrame(sceneFrame);
+
+/* ---------- first route ---------- */
+const h0=location.hash.slice(1);
+if(h0&&byId[h0])go(h0,null,false);else if(h0)go('home',h0,false);else current='home';
+})();
+</script>
+
+</body>
+</html>
