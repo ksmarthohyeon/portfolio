@@ -147,6 +147,7 @@ body.js .rv.in{opacity:1;transform:none}
 /* films */
 .film-feature{display:grid;grid-template-columns:1fr;gap:var(--s5)}
 @media(min-width:900px){.film-feature{grid-template-columns:7fr 5fr;align-items:end}}
+.film-feature>.work,.film-grid>.work{grid-column:auto}
 .film-feature .fig{aspect-ratio:16/9}
 .film-feature .fig::before{content:"";position:absolute;inset:-40%;background:linear-gradient(104deg,transparent 40%,rgba(217,164,65,.16) 50%,transparent 60%);transform:rotate(14deg);z-index:1;pointer-events:none;animation:shaft 9s var(--ease-wind) infinite alternate}
 @keyframes shaft{to{transform:rotate(14deg) translateX(14%)}}
@@ -374,8 +375,11 @@ const WORKS=[
 ];
 /* films: add entries here as they are finished. Each needs a poster image img/<id>.jpg (+ -m.jpg) and a video file. */
 const FILMS=[
+ {id:'sieve',n:1,title:'Sieve',year:2026,runtime:'',format:'Short film',director:'Hohyeon Lee',img:'img/sieve',video:'',alt:'Still from Sieve: a pale, hazy sky over the dark turquoise sea of Okinawa',
+  text:['Sieve is a short film set against the beautiful yet unsettling landscape of Okinawa, Japan. As mysterious disappearances and recurring nightmares begin to disturb the island\u2019s tranquility, the story gradually reveals the environmental destruction concealed beneath its natural beauty.','Through the contrast between Okinawa\u2019s idyllic scenery and the disturbing events unfolding within it, the film explores humanity\u2019s complicated relationship with nature, questioning how easily environmental harm can remain unnoticed until its consequences become impossible to ignore.']}
 ];
 FILMS.forEach(f=>{f.kind='film';});
+const fmeta=f=>[f.year,f.format,f.runtime].filter(Boolean).join(' \u2014 ');
 const byId=Object.fromEntries([...WORKS,...FILMS].map(w=>[w.id,w]));
 const pad=n=>String(n).padStart(2,'0');
 const metaLine=w=>`${w.year} — ${w.media.toUpperCase()} — ${w.dim.toUpperCase()}`;
@@ -405,12 +409,12 @@ function renderFilms(){
   }
   $('#films-count').textContent=`${FILMS.length} film${FILMS.length>1?'s':''}`;
   const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="play" aria-label="Play ${f.title}">
-    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">${f.runtime}</span></div>
-    <div class="cap"><span class="meta num" style="color:var(--amber)">${pad(f.n)}</span><div><h3>${f.title}</h3><p class="meta">${f.year} — ${f.format} — ${f.runtime}</p></div></div></a>`;
+    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${f.video?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
+    <div class="cap"><span class="meta num" style="color:var(--amber)">${pad(f.n)}</span><div><h3>${f.title}</h3><p class="meta">${fmeta(f)}</p></div></div></a>`;
   const [first,...rest]=FILMS;
   box.innerHTML=`<div class="film-feature rv">
-    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="play" aria-label="Play ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">${first.runtime}</span></div></a>
-    <div class="film-text"><p class="meta">${first.year} — ${first.format} — ${first.runtime}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">Watch and read more</a></div>
+    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="${first.video?'play':'view'}" aria-label="${first.video?'Play':'Open'} ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy">${first.video?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${first.runtime?`<span class="badge meta">${first.runtime}</span>`:''}</div></a>
+    <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${first.video?'Watch and read more':'Read more'}</a></div>
   </div>${rest.length?`<div class="film-grid">${rest.map(card).join('')}</div>`:''}`;
 }
 renderFilms();
@@ -421,6 +425,7 @@ function renderCase(w){
   const i=LIST.indexOf(w), prev=LIST[(i-1+LIST.length)%LIST.length], next=LIST[(i+1)%LIST.length];
   const hero=w.video
     ?`<video id="casevid" src="${w.video}" poster="${w.img}.jpg" controls playsinline preload="metadata" aria-label="${w.title}, video"></video>`
+    :isFilm?`<img src="${w.img}.jpg" alt="${w.alt}">`
     :`<button type="button" class="zoom" data-zoom="${w.img}.jpg" data-alt="${w.alt}" data-cap="${w.title}" aria-label="Enlarge ${w.title}" data-cur="view" style="display:block;width:100%"><img src="${w.img}.jpg" alt="${w.alt}"></button>`;
   const views=(w.views||[]).map((v,k)=>`<button type="button" class="zoom" data-zoom="${v}.jpg" data-alt="${w.title}, view ${k+2}" data-cap="${w.title} — view ${k+2}" data-cur="view"><img src="${v}-m.jpg" alt="${w.title}, view ${k+2}" loading="lazy"></button>`).join('');
   $('#case').innerHTML=`
@@ -431,7 +436,8 @@ function renderCase(w){
       <span class="meta">${pad(w.n)} / ${pad(LIST.length)}</span>
       <span class="meta">${w.year}</span>
       <span class="meta">${isFilm?'Film':w.kind==='sculpture'?'Sculpture':'Painting'}</span>
-      <span class="meta">${isFilm?w.runtime:w.dim}</span>
+      ${isFilm?(w.runtime?`<span class="meta">${w.runtime}</span>`:''):`<span class="meta">${w.dim}</span>`}
+      ${isFilm&&w.director?`<span class="meta">Directed by ${w.director}</span>`:''}
     </div>
   </div>
   <div class="case-hero rv in${w.kind==='sculpture'?' scul':''}">${hero}</div>
@@ -440,6 +446,7 @@ function renderCase(w){
       <p class="meta" style="color:${isFilm?'var(--amber)':'var(--bark)'}">${isFilm?'Format':'Materials'}</p>
       <p style="margin:var(--s2) 0 0;font-size:15px;max-width:30ch">${isFilm?w.format:w.media}</p>
       ${w.doc?`<p class="meta" style="margin-top:var(--s4);color:var(--amber)">${w.doc}</p>`:''}
+      ${isFilm&&!w.video?'<p class="meta" style="margin-top:var(--s4)">Screening online soon</p>':''}
     </aside>
     <div class="prose">${w.text.map((p,k)=>`<p class="rv in${k===0?' lead':''}">${p}</p>`).join('')}</div>
   </div>
@@ -681,6 +688,7 @@ const SCENES={
  'the-cost-of-comfort':{dark:false,cols:['#c8c3cc','#5f8e92','#8a5c4a','#c4333a','#9ba6b1','#efe7f0'],motif:'room',base:'#b9b3bf'},
  'borrowed-heart':{dark:true,cols:['#0a0a0c','#e9e4dc','#c8362f','#3b74d9','#564e59'],motif:'helix',base:'#0b0b0e'},
  'harvesting-life':{dark:false,cols:['#e9a2b2','#7aa37a','#b5583c','#6b7f9a','#f3d8d0','#d6c2ae'],motif:'leaves',base:'#e8cfcf'},
+ 'sieve':{dark:true,cols:['#0b2a3a','#3fb3b0','#dbe9e4','#f0d7b8','#0f3f3a','#1a6b7a'],motif:'water',base:'#071a2b'},
  'a-cycle-without-an-end':{dark:true,cols:['#4f7a2e','#f4c27a','#f2522b','#fbf6ee','#8fbf5a','#3c3c1a'],motif:'embers',base:'#2c3b1a'}
 };
 const scv=document.createElement('canvas');scv.id='scene';scv.setAttribute('aria-hidden','true');scv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:none';document.body.prepend(scv);
