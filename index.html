@@ -154,6 +154,16 @@ body.js .rv.in{opacity:1;transform:none}
 .film-text h3{font-size:clamp(32px,4vw,56px);line-height:1;letter-spacing:-.015em}
 .film-text p{color:var(--ink-muted);max-width:44ch}
 .film-text .meta{color:var(--amber)}
+.film-grid{display:grid;grid-template-columns:1fr;gap:var(--s6);margin-top:var(--s6)}
+@media(min-width:800px){.film-grid{grid-template-columns:1fr 1fr;column-gap:var(--s5)}}
+.film-grid .fig{aspect-ratio:16/9}
+.film-empty{display:grid;grid-template-columns:1fr;gap:var(--s5);align-items:center}
+@media(min-width:900px){.film-empty{grid-template-columns:7fr 5fr}}
+.film-empty .frame{aspect-ratio:16/9;border:1px solid var(--hairline);border-radius:var(--r-sm);display:grid;place-items:center;background:linear-gradient(120deg,transparent 40%,rgba(217,164,65,.08) 50%,transparent 60%),var(--ground-1)}
+.film-empty .frame span{width:64px;height:64px;border-radius:50%;border:1.5px solid var(--amber);display:grid;place-items:center}
+.film-empty .frame svg{width:18px;height:18px;fill:var(--amber);margin-left:3px}
+.film-empty p{color:var(--ink-muted);max-width:40ch;margin:0}
+.film-empty h3{font-size:clamp(28px,3.4vw,44px);line-height:1.05;margin-bottom:var(--s3)}
 
 /* about */
 .about{display:grid;grid-template-columns:1fr;gap:var(--s6)}
@@ -283,18 +293,8 @@ html[data-scene] .fog{background:linear-gradient(to top,var(--scene-base) 0%,var
 
   <section class="block" id="films">
     <div class="wrap">
-      <div class="sec-head rv"><h2><span class="mark amber"></span>Films</h2><span class="meta">Moving image</span></div>
-      <div class="film-feature rv">
-        <a class="work" href="#a-cycle-without-an-end" data-route="a-cycle-without-an-end" data-cur="play" aria-label="Play A Cycle Without an End">
-          <div class="fig"><img src="img/a-cycle-without-an-end-2.jpg" alt="Orange lava and smoke erupting inside the model landscape of A Cycle Without an End" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">56 s</span></div>
-        </a>
-        <div class="film-text">
-          <p class="meta">2026 — Video, colour, sound — 56 s</p>
-          <h3>A Cycle Without an End</h3>
-          <p>The sculpture in time. Inside a moss-covered box, LED light moves a miniature ecosystem through eruption, ash and regrowth, so that disturbance, loss, recovery and renewal play as one continuous loop.</p>
-          <a class="btn ghost" href="#a-cycle-without-an-end" data-route="a-cycle-without-an-end">Watch and read more</a>
-        </div>
-      </div>
+      <div class="sec-head rv"><h2><span class="mark amber"></span>Films</h2><span class="meta" id="films-count">Moving image</span></div>
+      <div id="films-list"></div>
     </div>
   </section>
 
@@ -369,18 +369,22 @@ const WORKS=[
   text:['This sculpture was prompted by news about xenotransplantation: gene-edited pigs whose hearts and kidneys are transplanted into human patients. The science amazed me, but it also raised a hard question. When an animal is designed to save our lives, what do we owe it? I built a pig whose body opens like a cage. Inside are a red heart and tangled blood vessels, and a blue surgical glove reaches in to take them. The DNA helixes stitched across its skin show that this animal has been rewritten at the most basic level for human needs.','For the body, I stretched hanji, traditional Korean mulberry paper, over a rattan core. Hanji is strong yet translucent, so it let me show the pig as both fragile and resilient, and its fibers look like skin and veins. I hand-stitched the DNA strands with thread and beads, because slow stitching felt like a quiet act of care, the opposite of the clinical glove. The hollow, caged structure makes the pig read as a container rather than a living being, and it asks viewers to think about where gratitude ends and use begins.']},
  {id:'harvesting-life',n:7,title:'Harvesting Life',year:2026,kind:'painting',media:'Acrylic on canvas',dim:'12 × 16 in',img:'img/harvesting-life',alt:'A figure with scissors cuts kidney-shaped fruit from a pink, skin-like plant tied with rope in a pot',
   text:['This painting compares the way humans cultivate plants for harvest with the way animals are bred and genetically altered for human benefit. I was interested in how both plants and animals live under human control without being able to speak for themselves or choose how their bodies are used.','The plant becomes a metaphor for a pig: its pink, hair-like leaves resemble skin, while kidneys grow in place of fruit. A rope tied around the pot suggests confinement and ownership, and the figure cuts the kidneys from the branches as if harvesting produce. The scissors also reference gene editing, connecting cultivation with the genetic modification of animals for organ transplantation. By blurring the boundary between animal and plant, I wanted to question how easily a living being can become a resource once its value is defined by what humans can take from it.']},
- {id:'a-cycle-without-an-end',n:8,title:'A Cycle Without an End',year:2026,kind:'sculpture',film:true,media:'Clay, paper, tree branches, LED lights, artificial grass, urethane foam and acrylic paint on paperboard; video, 56 s',dim:'9.5 × 9.5 × 3.5 in',img:'img/a-cycle-without-an-end',video:'video/a-cycle-without-an-end.mp4',views:['img/a-cycle-without-an-end-2','img/a-cycle-without-an-end-3'],alt:'A moss-covered paperboard box lit from inside, with a small green mountain, trees and paper animals in a white chamber',
+ {id:'a-cycle-without-an-end',n:8,title:'A Cycle Without an End',year:2026,kind:'sculpture',media:'Clay, paper, tree branches, LED lights, artificial grass, urethane foam and acrylic paint on paperboard',doc:'Documented on video, 56 s',dim:'9.5 × 9.5 × 3.5 in',img:'img/a-cycle-without-an-end',video:'video/a-cycle-without-an-end.mp4',views:['img/a-cycle-without-an-end-2','img/a-cycle-without-an-end-3'],alt:'A moss-covered paperboard box lit from inside, with a small green mountain, trees and paper animals in a white chamber',
   text:['This mixed-media sculpture explores natural disasters not simply as events to fear, but as part of the continuous cycle of an ecosystem. After a natural disaster, an ecosystem recovers through different stages. Plants begin to grow again, animals gradually return, and new relationships form within the changed environment.','Humans often fear natural disasters and try to resist or control nature, but some forces of nature exist beyond our control. Rather than viewing every disturbance only as something to prevent, I wanted to explore how we might also understand it as part of nature’s larger rhythm. There is no clear ending in this process: disturbance leads to recovery, recovery creates new growth, and the ecosystem adapts and becomes more resilient. Through changing light and landscape, I show plants and animals recovering together. This endless cycle suggests that change, loss, recovery, and renewal are not separate events, but interconnected stages of a living ecosystem.']}
 ];
-const byId=Object.fromEntries(WORKS.map(w=>[w.id,w]));
+/* films: add entries here as they are finished. Each needs a poster image img/<id>.jpg (+ -m.jpg) and a video file. */
+const FILMS=[
+];
+FILMS.forEach(f=>{f.kind='film';});
+const byId=Object.fromEntries([...WORKS,...FILMS].map(w=>[w.id,w]));
 const pad=n=>String(n).padStart(2,'0');
 const metaLine=w=>`${w.year} — ${w.media.toUpperCase()} — ${w.dim.toUpperCase()}`;
 
 /* ---------- gallery ---------- */
 const gal=$('#gal');
 gal.innerHTML=WORKS.map(w=>`
-<a class="work rv" href="#${w.id}" data-route="${w.id}" data-kind="${w.kind}" data-cur="${w.film?'play':'view'}">
-  <div class="fig${w.kind==='sculpture'?' scul':''}">${w.kind==='sculpture'&&!w.film?'<span class="plinth"></span>':''}<img src="${w.img}-m.jpg" alt="${w.alt}" loading="lazy" style="position:relative">${w.film?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">56 s</span>':''}</div>
+<a class="work rv" href="#${w.id}" data-route="${w.id}" data-kind="${w.kind}" data-cur="view">
+  <div class="fig${w.kind==='sculpture'?' scul':''}">${w.kind==='sculpture'?'<span class="plinth"></span>':''}<img src="${w.img}-m.jpg" alt="${w.alt}" loading="lazy" style="position:relative">${w.video?'<span class="badge meta">+ video</span>':''}</div>
   <div class="cap"><span class="meta num">${pad(w.n)}</span><div><h3>${w.title}</h3><p class="meta">${w.year} — ${w.kind==='sculpture'?'Sculpture':'Painting'} — ${w.dim}</p></div></div>
 </a>`).join('');
 
@@ -391,35 +395,56 @@ $$('.chip').forEach(c=>c.addEventListener('click',()=>{
   requestAnimationFrame(observeAll);
 }));
 
+/* ---------- films section ---------- */
+function renderFilms(){
+  const box=$('#films-list');
+  if(!FILMS.length){
+    $('#films-count').textContent='Moving image';
+    box.innerHTML=`<div class="film-empty rv"><div class="frame" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg></span></div><div><h3>First screening coming soon</h3><p>The films are being finished and will appear here, each with its own page, stills and notes.</p></div></div>`;
+    return;
+  }
+  $('#films-count').textContent=`${FILMS.length} film${FILMS.length>1?'s':''}`;
+  const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="play" aria-label="Play ${f.title}">
+    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">${f.runtime}</span></div>
+    <div class="cap"><span class="meta num" style="color:var(--amber)">${pad(f.n)}</span><div><h3>${f.title}</h3><p class="meta">${f.year} — ${f.format} — ${f.runtime}</p></div></div></a>`;
+  const [first,...rest]=FILMS;
+  box.innerHTML=`<div class="film-feature rv">
+    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="play" aria-label="Play ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span><span class="badge meta">${first.runtime}</span></div></a>
+    <div class="film-text"><p class="meta">${first.year} — ${first.format} — ${first.runtime}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">Watch and read more</a></div>
+  </div>${rest.length?`<div class="film-grid">${rest.map(card).join('')}</div>`:''}`;
+}
+renderFilms();
+
 /* ---------- case study ---------- */
 function renderCase(w){
-  const i=WORKS.indexOf(w), prev=WORKS[(i-1+WORKS.length)%WORKS.length], next=WORKS[(i+1)%WORKS.length];
+  const isFilm=w.kind==='film';const LIST=isFilm?FILMS:WORKS;
+  const i=LIST.indexOf(w), prev=LIST[(i-1+LIST.length)%LIST.length], next=LIST[(i+1)%LIST.length];
   const hero=w.video
     ?`<video id="casevid" src="${w.video}" poster="${w.img}.jpg" controls playsinline preload="metadata" aria-label="${w.title}, video"></video>`
     :`<button type="button" class="zoom" data-zoom="${w.img}.jpg" data-alt="${w.alt}" data-cap="${w.title}" aria-label="Enlarge ${w.title}" data-cur="view" style="display:block;width:100%"><img src="${w.img}.jpg" alt="${w.alt}"></button>`;
   const views=(w.views||[]).map((v,k)=>`<button type="button" class="zoom" data-zoom="${v}.jpg" data-alt="${w.title}, view ${k+2}" data-cap="${w.title} — view ${k+2}" data-cur="view"><img src="${v}-m.jpg" alt="${w.title}, view ${k+2}" loading="lazy"></button>`).join('');
   $('#case').innerHTML=`
-  <a class="back" href="#work" data-route="home" data-target="work"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All work</a>
+  <a class="back" href="#${isFilm?'films':'work'}" data-route="home" data-target="${isFilm?'films':'work'}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>${isFilm?'All films':'All work'}</a>
   <div class="case-head rv in">
     <h1>${w.title}</h1>
     <div class="specs">
-      <span class="meta">${pad(w.n)} / ${pad(WORKS.length)}</span>
+      <span class="meta">${pad(w.n)} / ${pad(LIST.length)}</span>
       <span class="meta">${w.year}</span>
-      <span class="meta">${w.kind==='sculpture'?'Sculpture':'Painting'}${w.film?' · Video':''}</span>
-      <span class="meta">${w.dim}</span>
+      <span class="meta">${isFilm?'Film':w.kind==='sculpture'?'Sculpture':'Painting'}</span>
+      <span class="meta">${isFilm?w.runtime:w.dim}</span>
     </div>
   </div>
   <div class="case-hero rv in${w.kind==='sculpture'?' scul':''}">${hero}</div>
   <div class="case-body">
     <aside class="aside rv in">
-      <p class="meta" style="color:var(--bark)">Materials</p>
-      <p style="margin:var(--s2) 0 0;font-size:15px;max-width:30ch">${w.media}</p>
-      ${w.film?'<p class="meta" style="margin-top:var(--s4);color:var(--amber)">Film — 56 s, colour, sound</p>':''}
+      <p class="meta" style="color:${isFilm?'var(--amber)':'var(--bark)'}">${isFilm?'Format':'Materials'}</p>
+      <p style="margin:var(--s2) 0 0;font-size:15px;max-width:30ch">${isFilm?w.format:w.media}</p>
+      ${w.doc?`<p class="meta" style="margin-top:var(--s4);color:var(--amber)">${w.doc}</p>`:''}
     </aside>
     <div class="prose">${w.text.map((p,k)=>`<p class="rv in${k===0?' lead':''}">${p}</p>`).join('')}</div>
   </div>
   ${views?`<div class="views rv in">${views}</div>`:''}
-  <nav class="pn rv in" aria-label="Previous and next work">
+  <nav class="pn rv in" aria-label="Previous and next">
     <a href="#${prev.id}" data-route="${prev.id}"><span class="meta">← Previous</span><span class="t">${prev.title}</span></a>
     <a href="#${next.id}" data-route="${next.id}"><span class="meta">Next →</span><span class="t">${next.title}</span></a>
   </nav>`;
