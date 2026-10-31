@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Hohyeon Lee — paintings, sculptures and film about the lives we overlook and the boundaries between people and other living things.">
+<meta name="description" content="Hohyeon Lee — paintings, sculptures, films and documentaries about the lives we overlook and the boundaries between people and other living things.">
 <meta property="og:title" content="Hohyeon Lee">
-<meta property="og:description" content="Paintings, sculptures and film.">
+<meta property="og:description" content="Paintings, sculptures, films and documentaries.">
 <meta property="og:image" content="img/where-no-one-hurts-them-m.jpg">
 <meta name="theme-color" content="#0b120d">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -80,6 +80,7 @@ body.scrolled .nav,html[data-scene] .nav{color:var(--ink);background:linear-grad
 .nav .brand{font-family:var(--font-display);font-size:19px;text-decoration:none;letter-spacing:.01em;font-weight:400}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:var(--s4)}
 .nav a.nl{font-size:14px;font-weight:500;letter-spacing:.02em;text-decoration:none;position:relative;padding:var(--s1) 0}
+@media(max-width:560px){.nav ul{gap:var(--s3)}.nav a.nl{font-size:12px}.nav .brand{font-size:16px}}
 .nav a.nl::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right var(--dur-base) var(--ease-leaf)}
 .nav a.nl:hover::after,.nav a.nl[aria-current="page"]::after{right:0}
 
@@ -103,6 +104,7 @@ section.block{padding-block:var(--s7)}
 .sec-head h2{font-size:clamp(36px,5vw,64px);line-height:.98;letter-spacing:-.015em}
 .sec-head .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--moss);margin-right:var(--s3);vertical-align:middle}
 .sec-head .mark.amber{background:var(--amber)}
+.sec-head .mark.bark{background:var(--bark)}
 .chips{display:flex;gap:var(--s2);flex-wrap:wrap}
 .chip{font-size:14px;font-weight:500;letter-spacing:.02em;padding:9px 16px;border:1px solid var(--hairline);border-radius:var(--r-pill);transition:background var(--dur-fast),color var(--dur-fast),border-color var(--dur-fast)}
 .chip:hover{border-color:var(--fern)}
@@ -261,6 +263,7 @@ html[data-scene] .fog{background:linear-gradient(to top,var(--scene-base) 0%,var
   <ul>
     <li><a class="nl" href="#work" data-route="work">Work</a></li>
     <li><a class="nl" href="#films" data-route="films">Films</a></li>
+    <li><a class="nl" href="#documentaries" data-route="documentaries">Documentaries</a></li>
     <li><a class="nl" href="#about" data-route="about">About</a></li>
   </ul>
 </nav>
@@ -271,7 +274,7 @@ html[data-scene] .fog{background:linear-gradient(to top,var(--scene-base) 0%,var
   <header class="hero" id="home">
     <canvas id="forest" aria-hidden="true"></canvas>
     <div class="hero-in wrap">
-      <p class="meta rv">Paintings · Sculptures · Film</p>
+      <p class="meta rv">Paintings · Sculptures · Films · Documentaries</p>
       <h1 class="rv">Hohyeon Lee</h1>
       <p class="lead rv">I make work about the lives that are overlooked or sacrificed in the name of human progress, and about the boundaries we draw between ourselves and other living things.</p>
       <div class="meta-row rv"><span class="meta">Suwon, Korea</span></div>
@@ -297,6 +300,13 @@ html[data-scene] .fog{background:linear-gradient(to top,var(--scene-base) 0%,var
     <div class="wrap">
       <div class="sec-head rv"><h2><span class="mark amber"></span>Films</h2><span class="meta" id="films-count">Moving image</span></div>
       <div id="films-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="documentaries">
+    <div class="wrap">
+      <div class="sec-head rv"><h2><span class="mark bark"></span>Documentaries</h2><span class="meta" id="docs-count">Non-fiction</span></div>
+      <div id="docs-list"></div>
     </div>
   </section>
 
@@ -374,9 +384,13 @@ const FILMS=[
   text:['Sieve is a short film set against the beautiful yet unsettling landscape of Okinawa, Japan. As mysterious disappearances and recurring nightmares begin to disturb the island\u2019s tranquility, the story gradually reveals the environmental destruction concealed beneath its natural beauty.','Through the contrast between Okinawa\u2019s idyllic scenery and the disturbing events unfolding within it, the film explores humanity\u2019s complicated relationship with nature, questioning how easily environmental harm can remain unnoticed until its consequences become impossible to ignore.']}
 ];
 FILMS.forEach(f=>{f.kind='film';});
+/* documentaries: same shape as films (title, runtime, format, director, img, embed or video, views, alt, text). */
+const DOCS=[
+];
+DOCS.forEach(f=>{f.kind='documentary';});
 const embedUrl=u=>{if(!u)return '';let m=u.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);if(m)return `https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&color=white`;m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);if(m)return `https://player.vimeo.com/video/${m[1]}?title=0&byline=0&portrait=0&color=d9a441`;return u;};
 const fmeta=f=>[f.format,f.runtime].filter(Boolean).join(' \u2014 ');
-const byId=Object.fromEntries([...WORKS,...FILMS].map(w=>[w.id,w]));
+const byId=Object.fromEntries([...WORKS,...FILMS,...DOCS].map(w=>[w.id,w]));
 const pad=n=>String(n).padStart(2,'0');
 const metaLine=w=>`${w.media.toUpperCase()} — ${w.dim.toUpperCase()}`;
 
@@ -395,29 +409,30 @@ $$('.chip').forEach(c=>c.addEventListener('click',()=>{
   requestAnimationFrame(observeAll);
 }));
 
-/* ---------- films section ---------- */
-function renderFilms(){
-  const box=$('#films-list');
-  if(!FILMS.length){
-    $('#films-count').textContent='Moving image';
-    box.innerHTML=`<div class="film-empty rv"><div class="frame" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg></span></div><div><h3>First screening coming soon</h3><p>The films are being finished and will appear here, each with its own page, stills and notes.</p></div></div>`;
+/* ---------- films & documentaries sections ---------- */
+function renderScreenings(LIST,listId,countId,noun,empty){
+  const box=$('#'+listId);
+  if(!LIST.length){
+    box.innerHTML=`<div class="film-empty rv"><div class="frame" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg></span></div><div><h3>${empty[0]}</h3><p>${empty[1]}</p></div></div>`;
     return;
   }
-  $('#films-count').textContent=`${FILMS.length} film${FILMS.length>1?'s':''}`;
-  const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="play" aria-label="Play ${f.title}">
-    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${(f.video||f.embed)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
+  $('#'+countId).textContent=`${LIST.length} ${noun}${LIST.length>1?'s':''}`;
+  const playable=f=>!!(f.video||f.embed);
+  const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="${playable(f)?'play':'view'}" aria-label="${playable(f)?'Play':'Open'} ${f.title}">
+    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${playable(f)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
     <div class="cap"><span class="meta num" style="color:var(--amber)">${pad(f.n)}</span><div><h3>${f.title}</h3><p class="meta">${fmeta(f)}</p></div></div></a>`;
-  const [first,...rest]=FILMS;
+  const [first,...rest]=LIST;
   box.innerHTML=`<div class="film-feature rv">
-    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="${(first.video||first.embed)?'play':'view'}" aria-label="${(first.video||first.embed)?'Play':'Open'} ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy">${(first.video||first.embed)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${first.runtime?`<span class="badge meta">${first.runtime}</span>`:''}</div></a>
-    <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${(first.video||first.embed)?'Watch and read more':'Read more'}</a></div>
+    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="${playable(first)?'play':'view'}" aria-label="${playable(first)?'Play':'Open'} ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy">${playable(first)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${first.runtime?`<span class="badge meta">${first.runtime}</span>`:''}</div></a>
+    <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${playable(first)?'Watch and read more':'Read more'}</a></div>
   </div>${rest.length?`<div class="film-grid">${rest.map(card).join('')}</div>`:''}`;
 }
-renderFilms();
+renderScreenings(FILMS,'films-list','films-count','film',['First screening coming soon','The films are being finished and will appear here, each with its own page, stills and notes.']);
+renderScreenings(DOCS,'docs-list','docs-count','documentary',['Two documentaries coming soon','They are being finished and will appear here, each with its own page, stills and notes.']);
 
 /* ---------- case study ---------- */
 function renderCase(w){
-  const isFilm=w.kind==='film';const LIST=isFilm?FILMS:WORKS;
+  const isDoc=w.kind==='documentary';const isFilm=w.kind==='film'||isDoc;const LIST=isDoc?DOCS:isFilm?FILMS:WORKS;
   const i=LIST.indexOf(w), prev=LIST[(i-1+LIST.length)%LIST.length], next=LIST[(i+1)%LIST.length];
   const hero=w.embed
     ?`<div class="embed"><iframe src="${embedUrl(w.embed)}" title="${w.title}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><p class="meta" style="margin-top:var(--s2)"><a href="${w.embed}" target="_blank" rel="noopener">Open on ${/vimeo/.test(w.embed)?'Vimeo':'YouTube'} ↗</a></p>`
@@ -427,12 +442,12 @@ function renderCase(w){
     :`<button type="button" class="zoom" data-zoom="${w.img}.jpg" data-alt="${w.alt}" data-cap="${w.title}" aria-label="Enlarge ${w.title}" data-cur="view" style="display:block;width:100%"><img src="${w.img}.jpg" alt="${w.alt}"></button>`;
   const views=(w.views||[]).map((v,k)=>`<button type="button" class="zoom" data-zoom="${v}.jpg" data-alt="${w.title}, view ${k+2}" data-cap="${w.title} — view ${k+2}" data-cur="view"><img src="${v}-m.jpg" alt="${w.title}, view ${k+2}" loading="lazy"></button>`).join('');
   $('#case').innerHTML=`
-  <a class="back" href="#${isFilm?'films':'work'}" data-route="home" data-target="${isFilm?'films':'work'}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>${isFilm?'All films':'All work'}</a>
+  <a class="back" href="#${isDoc?'documentaries':isFilm?'films':'work'}" data-route="home" data-target="${isDoc?'documentaries':isFilm?'films':'work'}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>${isDoc?'All documentaries':isFilm?'All films':'All work'}</a>
   <div class="case-head rv in">
     <h1>${w.title}</h1>
     <div class="specs">
       <span class="meta">${pad(w.n)} / ${pad(LIST.length)}</span>
-      <span class="meta">${isFilm?'Film':w.kind==='sculpture'?'Sculpture':'Painting'}</span>
+      <span class="meta">${isDoc?'Documentary':isFilm?'Film':w.kind==='sculpture'?'Sculpture':'Painting'}</span>
       ${isFilm?(w.runtime?`<span class="meta">${w.runtime}</span>`:''):`<span class="meta">${w.dim}</span>`}
       ${isFilm&&w.director?`<span class="meta">Directed by ${w.director}</span>`:''}
     </div>
@@ -463,7 +478,7 @@ function go(route,target,push){
   const doShow=()=>{
     if(w){renderCase(w);views.home.classList.remove('on');views.case.classList.add('on');window.scrollTo({top:0,behavior:'instant'});}
     else{views.case.classList.remove('on');views.home.classList.add('on');
-      const t=target||(['work','films','about','contact'].includes(route)?route:null);
+      const t=target||(['work','films','documentaries','about','contact'].includes(route)?route:null);
       if(t){const el=document.getElementById(t);if(el){const y=el.getBoundingClientRect().top+scrollY-24;window.scrollTo({top:y,behavior:push?'smooth':'instant'});}}
       else if(push) window.scrollTo({top:0,behavior:'instant'});
     }
