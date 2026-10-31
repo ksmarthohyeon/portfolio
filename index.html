@@ -386,6 +386,10 @@ const FILMS=[
 FILMS.forEach(f=>{f.kind='film';});
 /* documentaries: same shape as films (title, runtime, format, director, img, embed or video, views, alt, text). */
 const DOCS=[
+ {id:'bali-journey',n:1,title:'Bali Journey',runtime:'2 min 56 s',format:'Documentary short',img:'img/bali-journey',video:'',embed:'https://www.youtube.com/watch?v=RQM9yIm2KhU',alt:'Students in Bali Wildlife Rescue Center T-shirts hold up certificates in front of a painted wall reading Wildlife Rescue Center',
+  text:['Students reflect on human-driven ecological threats to sea turtles and wildlife in Bali, from climate-skewed sex ratios and microplastics to harmful fisheries.','The film argues that true conservation demands personal accountability, ecosystem balance, and a deep cultural understanding before attempting to shift environmental perceptions.']},
+ {id:'woof-house-pop-up',n:2,title:'WOOF House Pop-up',runtime:'6 min 06 s',format:'Documentary short',img:'img/woof-house-pop-up',video:'',embed:'https://www.youtube.com/watch?v=SNP836QpWRM',alt:'A student organiser speaks into a microphone in front of the green WOOF House signage at the pop-up store in Seongsu-dong',
+  text:['Documenting the WOOF HOUSE pop-up store in Seongsu-dong, student organizers and participants share their eye-opening experiences with the global crisis of abandoned and stray dogs, witnessed firsthand in places like Korea, Hong Kong, and Bali.','The project aims to shift public perceptions, challenge biases against stray animals, and raise funds and awareness for shelter reform, stronger animal protection laws, and a more compassionate world.']}
 ];
 DOCS.forEach(f=>{f.kind='documentary';});
 const embedUrl=u=>{if(!u)return '';let m=u.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);if(m)return `https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&color=white`;m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);if(m)return `https://player.vimeo.com/video/${m[1]}?title=0&byline=0&portrait=0&color=d9a441`;return u;};
@@ -416,7 +420,7 @@ function renderScreenings(LIST,listId,countId,noun,empty){
     box.innerHTML=`<div class="film-empty rv"><div class="frame" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg></span></div><div><h3>${empty[0]}</h3><p>${empty[1]}</p></div></div>`;
     return;
   }
-  $('#'+countId).textContent=`${LIST.length} ${noun}${LIST.length>1?'s':''}`;
+  $('#'+countId).textContent=`${LIST.length} ${LIST.length>1?noun[1]:noun[0]}`;
   const playable=f=>!!(f.video||f.embed);
   const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="${playable(f)?'play':'view'}" aria-label="${playable(f)?'Play':'Open'} ${f.title}">
     <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${playable(f)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
@@ -427,8 +431,8 @@ function renderScreenings(LIST,listId,countId,noun,empty){
     <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${playable(first)?'Watch and read more':'Read more'}</a></div>
   </div>${rest.length?`<div class="film-grid">${rest.map(card).join('')}</div>`:''}`;
 }
-renderScreenings(FILMS,'films-list','films-count','film',['First screening coming soon','The films are being finished and will appear here, each with its own page, stills and notes.']);
-renderScreenings(DOCS,'docs-list','docs-count','documentary',['Two documentaries coming soon','They are being finished and will appear here, each with its own page, stills and notes.']);
+renderScreenings(FILMS,'films-list','films-count',['film','films'],['First screening coming soon','The films are being finished and will appear here, each with its own page, stills and notes.']);
+renderScreenings(DOCS,'docs-list','docs-count',['documentary','documentaries'],['Two documentaries coming soon','They are being finished and will appear here, each with its own page, stills and notes.']);
 
 /* ---------- case study ---------- */
 function renderCase(w){
@@ -700,6 +704,8 @@ const SCENES={
  'the-cost-of-comfort':{dark:false,cols:['#c8c3cc','#5f8e92','#8a5c4a','#c4333a','#9ba6b1','#efe7f0'],motif:'room',base:'#b9b3bf'},
  'borrowed-heart':{dark:true,cols:['#0a0a0c','#e9e4dc','#c8362f','#3b74d9','#564e59'],motif:'helix',base:'#0b0b0e'},
  'harvesting-life':{dark:false,cols:['#e9a2b2','#7aa37a','#b5583c','#6b7f9a','#f3d8d0','#d6c2ae'],motif:'leaves',base:'#e8cfcf'},
+ 'bali-journey':{dark:false,cols:['#9fd0c2','#f4d58d','#5fa37c','#8fd3ff','#e58f73','#f6f1e3'],motif:'water',base:'#eef3e6'},
+ 'woof-house-pop-up':{dark:false,cols:['#79c143','#d8f0b8','#f3d27a','#c9a27a','#ffffff','#3f6b2f'],motif:'petals',base:'#f1f4e8'},
  'sieve':{dark:true,cols:['#0b2a3a','#3fb3b0','#dbe9e4','#f0d7b8','#0f3f3a','#1a6b7a'],motif:'water',base:'#071a2b'},
  'a-cycle-without-an-end':{dark:true,cols:['#4f7a2e','#f4c27a','#f2522b','#fbf6ee','#8fbf5a','#3c3c1a'],motif:'embers',base:'#2c3b1a'}
 };
