@@ -207,11 +207,12 @@ footer .row{display:flex;justify-content:space-between;gap:var(--s4);flex-wrap:w
 @media(min-width:900px){.case-hero{margin-inline:0}}
 .case-hero img,.case-hero video{width:100%;height:auto;max-height:88vh;object-fit:contain;background:var(--ground-1)}
 .case-hero.scul img{object-fit:cover;max-height:80vh}
+.embed{position:relative;aspect-ratio:16/9;background:#000}.embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .case-body{display:grid;grid-template-columns:1fr;gap:var(--s6);padding-block:var(--s7)}
 @media(min-width:900px){.case-body{grid-template-columns:3fr 7fr}}
 .case-body .aside{position:sticky;top:var(--s7);align-self:start}
 .views{display:grid;grid-template-columns:1fr;gap:var(--s5);margin-bottom:var(--s7)}
-@media(min-width:800px){.views{grid-template-columns:1fr 1fr}}
+@media(min-width:800px){.views{grid-template-columns:1fr 1fr}.views:has(>:nth-child(3)){grid-template-columns:1fr 1fr 1fr}}
 .views button{display:block;width:100%;background:var(--ground-1)}
 .views img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform var(--dur-slow) var(--ease-leaf)}
 .views button:hover img{transform:scale(1.03)}
@@ -375,10 +376,11 @@ const WORKS=[
 ];
 /* films: add entries here as they are finished. Each needs a poster image img/<id>.jpg (+ -m.jpg) and a video file. */
 const FILMS=[
- {id:'sieve',n:1,title:'Sieve',year:2026,runtime:'',format:'Short film',director:'Hohyeon Lee',img:'img/sieve',video:'',alt:'Still from Sieve: a pale, hazy sky over the dark turquoise sea of Okinawa',
+ {id:'sieve',n:1,title:'Sieve',year:2026,runtime:'6 min 55 s',format:'Short film, colour, sound',director:'Hohyeon Lee',img:'img/sieve',video:'',embed:'',views:['img/sieve-2','img/sieve-3','img/sieve-4'],alt:'Still from Sieve: a lone rock topped with green shrubs standing in shallow turquoise sea off Okinawa, with a group of people wading toward it',
   text:['Sieve is a short film set against the beautiful yet unsettling landscape of Okinawa, Japan. As mysterious disappearances and recurring nightmares begin to disturb the island\u2019s tranquility, the story gradually reveals the environmental destruction concealed beneath its natural beauty.','Through the contrast between Okinawa\u2019s idyllic scenery and the disturbing events unfolding within it, the film explores humanity\u2019s complicated relationship with nature, questioning how easily environmental harm can remain unnoticed until its consequences become impossible to ignore.']}
 ];
 FILMS.forEach(f=>{f.kind='film';});
+const embedUrl=u=>{if(!u)return '';let m=u.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{6,})/);if(m)return `https://www.youtube-nocookie.com/embed/${m[1]}?rel=0&modestbranding=1&color=white`;m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);if(m)return `https://player.vimeo.com/video/${m[1]}?title=0&byline=0&portrait=0&color=d9a441`;return u;};
 const fmeta=f=>[f.year,f.format,f.runtime].filter(Boolean).join(' \u2014 ');
 const byId=Object.fromEntries([...WORKS,...FILMS].map(w=>[w.id,w]));
 const pad=n=>String(n).padStart(2,'0');
@@ -409,12 +411,12 @@ function renderFilms(){
   }
   $('#films-count').textContent=`${FILMS.length} film${FILMS.length>1?'s':''}`;
   const card=f=>`<a class="work rv" href="#${f.id}" data-route="${f.id}" data-cur="play" aria-label="Play ${f.title}">
-    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${f.video?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
+    <div class="fig"><img src="${f.img}-m.jpg" alt="${f.alt}" loading="lazy" style="position:relative">${(f.video||f.embed)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${f.runtime?`<span class="badge meta">${f.runtime}</span>`:''}</div>
     <div class="cap"><span class="meta num" style="color:var(--amber)">${pad(f.n)}</span><div><h3>${f.title}</h3><p class="meta">${fmeta(f)}</p></div></div></a>`;
   const [first,...rest]=FILMS;
   box.innerHTML=`<div class="film-feature rv">
-    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="${first.video?'play':'view'}" aria-label="${first.video?'Play':'Open'} ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy">${first.video?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${first.runtime?`<span class="badge meta">${first.runtime}</span>`:''}</div></a>
-    <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${first.video?'Watch and read more':'Read more'}</a></div>
+    <a class="work" href="#${first.id}" data-route="${first.id}" data-cur="${(first.video||first.embed)?'play':'view'}" aria-label="${(first.video||first.embed)?'Play':'Open'} ${first.title}"><div class="fig"><img src="${first.img}.jpg" alt="${first.alt}" loading="lazy">${(first.video||first.embed)?'<span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3l15 9-15 9z"/></svg></span>':''}${first.runtime?`<span class="badge meta">${first.runtime}</span>`:''}</div></a>
+    <div class="film-text"><p class="meta">${fmeta(first)}${first.director?` — DIRECTED BY ${first.director.toUpperCase()}`:''}</p><h3>${first.title}</h3><p>${first.text[0]}</p><a class="btn ghost" href="#${first.id}" data-route="${first.id}">${(first.video||first.embed)?'Watch and read more':'Read more'}</a></div>
   </div>${rest.length?`<div class="film-grid">${rest.map(card).join('')}</div>`:''}`;
 }
 renderFilms();
@@ -423,7 +425,9 @@ renderFilms();
 function renderCase(w){
   const isFilm=w.kind==='film';const LIST=isFilm?FILMS:WORKS;
   const i=LIST.indexOf(w), prev=LIST[(i-1+LIST.length)%LIST.length], next=LIST[(i+1)%LIST.length];
-  const hero=w.video
+  const hero=w.embed
+    ?`<div class="embed"><iframe src="${embedUrl(w.embed)}" title="${w.title}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><p class="meta" style="margin-top:var(--s2)"><a href="${w.embed}" target="_blank" rel="noopener">Open on ${/vimeo/.test(w.embed)?'Vimeo':'YouTube'} ↗</a></p>`
+    :w.video
     ?`<video id="casevid" src="${w.video}" poster="${w.img}.jpg" controls playsinline preload="metadata" aria-label="${w.title}, video"></video>`
     :isFilm?`<img src="${w.img}.jpg" alt="${w.alt}">`
     :`<button type="button" class="zoom" data-zoom="${w.img}.jpg" data-alt="${w.alt}" data-cap="${w.title}" aria-label="Enlarge ${w.title}" data-cur="view" style="display:block;width:100%"><img src="${w.img}.jpg" alt="${w.alt}"></button>`;
@@ -446,15 +450,15 @@ function renderCase(w){
       <p class="meta" style="color:${isFilm?'var(--amber)':'var(--bark)'}">${isFilm?'Format':'Materials'}</p>
       <p style="margin:var(--s2) 0 0;font-size:15px;max-width:30ch">${isFilm?w.format:w.media}</p>
       ${w.doc?`<p class="meta" style="margin-top:var(--s4);color:var(--amber)">${w.doc}</p>`:''}
-      ${isFilm&&!w.video?'<p class="meta" style="margin-top:var(--s4)">Screening online soon</p>':''}
+      ${isFilm&&!w.video&&!w.embed?'<p class="meta" style="margin-top:var(--s4)">Screening online soon</p>':''}
     </aside>
     <div class="prose">${w.text.map((p,k)=>`<p class="rv in${k===0?' lead':''}">${p}</p>`).join('')}</div>
   </div>
   ${views?`<div class="views rv in">${views}</div>`:''}
-  <nav class="pn rv in" aria-label="Previous and next">
+  ${LIST.length>1?`<nav class="pn rv in" aria-label="Previous and next">
     <a href="#${prev.id}" data-route="${prev.id}"><span class="meta">← Previous</span><span class="t">${prev.title}</span></a>
     <a href="#${next.id}" data-route="${next.id}"><span class="meta">Next →</span><span class="t">${next.title}</span></a>
-  </nav>`;
+  </nav>`:''}`;
 }
 
 /* ---------- routing ---------- */
