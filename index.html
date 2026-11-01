@@ -6,10 +6,15 @@
 <meta name="description" content="Hohyeon Lee — paintings, sculptures, films and documentaries about the lives we overlook and the boundaries between people and other living things.">
 <meta property="og:title" content="Hohyeon Lee">
 <meta property="og:description" content="Paintings, sculptures, films and documentaries.">
-<meta property="og:image" content="img/where-no-one-hurts-them-m.jpg">
+<meta property="og:image" content="https://hohyeongallery.com/img/where-no-one-hurts-them-m.jpg">
+<meta property="og:url" content="https://hohyeongallery.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b120d">
+<link rel="canonical" href="https://hohyeongallery.com/">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Hohyeon Lee</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b120d'/%3E%3Cpath d='M32 8 Q52 28 32 56 Q12 28 32 8 Z' fill='%236f9a5b'/%3E%3Cpath d='M32 14 V50' stroke='%230b120d' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
@@ -77,10 +82,11 @@ h1,h2,h3{font-family:var(--font-display);font-weight:300;margin:0;text-wrap:bala
 body.scrolled .nav,html[data-scene] .nav{color:var(--ink);background:linear-gradient(to bottom,var(--ground-0) 0%,color-mix(in srgb,var(--ground-0) 70%,transparent) 55%,transparent 100%)}
 .nav a{pointer-events:auto}
 @media(min-width:900px){.nav{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
-.nav .brand{font-family:var(--font-display);font-size:19px;text-decoration:none;letter-spacing:.01em;font-weight:400}
+.nav .brand{font-family:var(--font-display);font-size:19px;text-decoration:none;letter-spacing:.01em;font-weight:400;white-space:nowrap}
+.nav ul li{white-space:nowrap}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:var(--s4)}
 .nav a.nl{font-size:14px;font-weight:500;letter-spacing:.02em;text-decoration:none;position:relative;padding:var(--s1) 0}
-@media(max-width:560px){.nav ul{gap:var(--s3)}.nav a.nl{font-size:12px}.nav .brand{font-size:16px}}
+@media(max-width:560px){.nav{gap:var(--s3)}.nav ul{gap:10px}.nav a.nl{font-size:11px;letter-spacing:0}.nav .brand{font-size:15px}}
 .nav a.nl::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right var(--dur-base) var(--ease-leaf)}
 .nav a.nl:hover::after,.nav a.nl[aria-current="page"]::after{right:0}
 
@@ -243,8 +249,8 @@ footer .row{display:flex;justify-content:space-between;gap:var(--s4);flex-wrap:w
 
 /* scene pages: the work colours its own page */
 main{position:relative;z-index:1}
-html[data-scene="light"]{--ink:#15201a;--ink-muted:#3d473f;--ground-1:rgba(255,255,255,.62);--ground-2:rgba(255,255,255,.5);--hairline:rgba(21,32,26,.22);--bark:#6b4a2c;--fern:#2f5f26;--moss:#3f6b2f;--amber:#8f6210;--on-moss:#f4f1e8;--focus:#7a4f00}
-html[data-scene="dark"]{--ink:#f3eee2;--ink-muted:#d6d0c2;--ground-1:rgba(10,14,12,.55);--ground-2:rgba(10,14,12,.45);--hairline:rgba(243,238,226,.25);--bark:#d9b48a;--fern:#c6e39f;--moss:#8fc27a;--amber:#f0c060;--on-moss:#0b120d;--focus:#f0d27a}
+html:root[data-scene="light"]{--ink:#15201a;--ink-muted:#3d473f;--ground-1:rgba(255,255,255,.62);--ground-2:rgba(255,255,255,.5);--hairline:rgba(21,32,26,.22);--bark:#6b4a2c;--fern:#2f5f26;--moss:#3f6b2f;--amber:#8f6210;--on-moss:#f4f1e8;--focus:#7a4f00}
+html:root[data-scene="dark"]{--ink:#f3eee2;--ink-muted:#d6d0c2;--ground-1:rgba(10,14,12,.55);--ground-2:rgba(10,14,12,.45);--hairline:rgba(243,238,226,.25);--bark:#d9b48a;--fern:#c6e39f;--moss:#8fc27a;--amber:#f0c060;--on-moss:#0b120d;--focus:#f0d27a}
 html[data-scene] .nav{background:linear-gradient(to bottom,var(--scene-base) 0%,transparent 100%)}
 html[data-scene] .case-body{background:var(--ground-1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:var(--s5);border-radius:var(--r-md)}
 html[data-scene] .case-head,html[data-scene] .pn{text-shadow:0 1px 18px var(--scene-base)}
